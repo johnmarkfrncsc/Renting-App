@@ -1,0 +1,91 @@
+import rentSchema from "../model/RentSchema.js";
+
+export async function getApiRent(req, res) {
+  try {
+    const rents = await rentSchema.find().sort({ createdAt: -1 });
+    res
+      .status(200)
+      .json(rents, { messsage: "You've successfully fetched all rents" });
+  } catch (error) {
+    console.log("Error in fetching all rents", error);
+    res.status(500).json({ messsage: "Error in fetching all rents" });
+  }
+}
+
+export async function getApiRentById(req, res) {
+  try {
+    const rentsById = await rentSchema.findById(req.params.id);
+    if (!rentsById) {
+      return res
+        .status(404)
+        .json({ message: "Bad Request, Rent is not found" });
+    }
+    res
+      .status(200)
+      .json(rentsById, { messsage: "You've successfully get a rent" });
+  } catch (error) {
+    console.log("Error in fetching a rent", error);
+    res.status(500).json({ messsage: "Error in getting a rent" });
+  }
+}
+
+export async function postApiRent(req, res) {
+  try {
+    const { rentTitle, rentDescription, rentPrice } = req.body;
+    const newRents = new rentSchema({
+      rentTitle: rentTitle,
+      rentDescription: rentDescription,
+      rentPrice: rentPrice,
+    });
+    const savedRents = await newRents.save();
+    res
+      .status(201)
+      .json(savedRents, { message: "You've successfully created a new rent" });
+  } catch (error) {
+    console.log("Error in creating a new rent", error);
+    res.status(400).json({ messsage: "Error 400 Bad Request" });
+  }
+}
+
+export async function putApiRent(req, res) {
+  try {
+    const { rentTitle, rentDescription, rentPrice } = req.body;
+    const updateRent = await rentSchema.findByIdAndUpdate(
+      req.params.id,
+      {
+        rentTitle,
+        rentDescription,
+        rentPrice,
+      },
+      { new: true }
+    );
+    if (!updateRent) {
+      return res
+        .status(404)
+        .json({ message: "Bad request, The rent is not found" });
+    }
+    res
+      .status(200)
+      .json(updateRent, { message: "You've successfully updated the rent" });
+  } catch (error) {
+    console.log("Error in updating a rent", error);
+    res.status(500).json({ message: "Error in updating request" });
+  }
+}
+
+export async function deleteApiRent(req, res) {
+  try {
+    const deleteRent = await rentSchema.findByIdAndDelete(req.params.id);
+    if (!deleteRent) {
+      return res
+        .status(404)
+        .json({ message: "Bad Request, The rent is not found" });
+    }
+    res
+      .status(200)
+      .json(deleteRent, { messsage: "Successfully deleted the rent" });
+  } catch (error) {
+    console.log("Error in deleting a rent", error);
+    res.status(500).json({ message: "Error in deleting request" });
+  }
+}
