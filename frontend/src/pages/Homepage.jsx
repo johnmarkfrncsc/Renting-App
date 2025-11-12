@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar.jsx";
 import HeroImage from "../assets/images/HeroImage.jpg";
 import { MousePointerClick } from "lucide-react";
 import FeaturedSection from "../components/featured/FeaturedSection.jsx";
+import Card from "../components/Card.jsx";
 
 const Homepage = () => {
   return (
@@ -35,6 +36,8 @@ const Homepage = () => {
           </div>
         </div>
         <FeaturedSection />
+        <h1>Explore</h1>
+        <Card />
       </header>
     </>
   );

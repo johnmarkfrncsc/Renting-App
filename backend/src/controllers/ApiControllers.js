@@ -31,11 +31,21 @@ export async function getApiRentById(req, res) {
 
 export async function postApiRent(req, res) {
   try {
-    const { rentTitle, rentDescription, rentPrice } = req.body;
+    const {
+      rentTitle,
+      rentDescription,
+      rentAddress,
+      rentCategory,
+      rentPrice,
+      rentImageURL,
+    } = req.body;
     const newRents = new rentSchema({
       rentTitle: rentTitle,
       rentDescription: rentDescription,
+      rentAddress: rentAddress,
+      rentCategory: rentCategory,
       rentPrice: rentPrice,
+      rentImageURL: rentImageURL,
     });
     const savedRents = await newRents.save();
     res
@@ -49,13 +59,23 @@ export async function postApiRent(req, res) {
 
 export async function putApiRent(req, res) {
   try {
-    const { rentTitle, rentDescription, rentPrice } = req.body;
+    const {
+      rentTitle,
+      rentDescription,
+      rentAddress,
+      rentCategory,
+      rentPrice,
+      rentImageURL,
+    } = req.body;
     const updateRent = await rentSchema.findByIdAndUpdate(
       req.params.id,
       {
         rentTitle,
         rentDescription,
+        rentAddress,
+        rentCategory,
         rentPrice,
+        rentImageURL,
       },
       { new: true }
     );

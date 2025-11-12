@@ -1,24 +1,25 @@
-import React from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import FeaturedCondo from "../../assets/images/featuredImages/FeaturedCondo.jpg";
-import FeaturedVacation from "../../assets/images/featuredImages/FeaturedVacation.jpg";
-import featuredDorms from "../../assets/images/featuredImages/featuredDorms.jpg";
-import featuredHouse from "../../assets/images/featuredImages/featuredHouse.jpg";
-import featuredApartment from "../../assets/images/featuredImages/featuredApartment.jpg";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Card from "../Card";
 
 const FeaturedSection = () => {
-  const [emblaRef] = useEmblaCarousel({ loop: false, skipSnaps: true });
+  const [data, setData] = useState([]);
+  const fetchRents = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/rents`);
+      setData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const slides = [
-    FeaturedCondo,
-    FeaturedVacation,
-    featuredDorms,
-    featuredHouse,
-    featuredApartment,
-  ];
+  useEffect(() => {
+    fetchRents();
+  }, []);
 
   return (
-    <section className="px-4 py-8 md:px-8 lg:px-16 min-h-screen bg-neutral-100">
+    <section className="px-4 py-8 md:px-8 lg:px-16  bg-neutral-100">
       {/* Header */}
       <div className="text-center mb-6">
         <h2 className="text-black text-2xl md:text-3xl font-semibold">
@@ -30,67 +31,41 @@ const FeaturedSection = () => {
         </p>
       </div>
 
-      {/* Embla Carousel */}
-      <div className="overflow-hidden" ref={emblaRef}>
+      <div className="overflow-hidden">
         <div className="flex gap-4">
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className="flex-[0_0_80%] sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_25%] rounded-3xl overflow-hidden shadow-lg"
-            >
-              <img
-                src={slide}
-                alt={`Featured ${index + 1}`}
-                className="w-full h-64 md:h-80 lg:h-96 object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
+          {data.map((data, _id) => (
+            <Card
+              key={_id}
+              title={data.rentTitle}
+              description={data.rentDescription}
+              category={data.rentCategory}
+              address={data.rentAddress}
+              price={data.rentPrice}
+              img={data.rentImageURL}
+            />
           ))}
         </div>
       </div>
+      {/* Embla Carousel
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex gap-4">
+          {rentals.map((rental, _id) => (
+            <div
+              key={_id}
+              className="flex-[0_0_80%] sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_25%]  overflow-hidden shadow-lg"
+            >
+              <img
+                src={rental.image}
+                alt={`Featured ${_id + 1}`}
+                className="w-full h-64 md:h-80 lg:h-96 object-cover transition-transform duration-300 rounded-2xl hover:scale-105 "
+              />
+              <h2 className="text-black mt-4">{rental.rentTitle}</h2>
+            </div>
+          ))}
+        </div>
+      </div> */}
     </section>
   );
 };
 
 export default FeaturedSection;
-
-{
-  /* <img
-            src={FeaturedCondo}
-            alt="Featured condo"
-            className="
-              w-full 
-              h-56 sm:h-72 md:h-80 lg:h-112 
-              object-cover 
-              transition-transform 
-              duration-300 
-              hover:scale-105
-            "
-          />
-          <img
-            src={FeaturedVacation}
-            alt="Featured condo"
-            className="
-              w-full 
-              h-56 sm:h-72 md:h-80 lg:h-112 
-              object-cover 
-              transition-transform 
-              duration-300 
-              hover:scale-105
-            "
-          /> */
-}
-
-{
-  /* <Swiper
-          spaceBetween={50}
-          slidesPerView={3}
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
-        >
-          <SwiperSlide>Slide 1</SwiperSlide>
-          <SwiperSlide>Slide 2</SwiperSlide>
-          <SwiperSlide>Slide 3</SwiperSlide>
-          <SwiperSlide>Slide 4</SwiperSlide>
-          ...
-        </Swiper> */
-}

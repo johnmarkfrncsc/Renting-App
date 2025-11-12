@@ -4,7 +4,10 @@ const rentSchema = new mongoose.Schema(
   {
     rentTitle: { type: String },
     rentDescription: { type: String },
+    rentAddress: { type: String },
+    rentCategory: { type: String },
     rentPrice: { type: Number },
+    rentImageURL: { type: String },
   },
   { timestamps: true }
 );

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Shell } from "lucide-react";
 
 const Navbar = () => {
@@ -12,7 +13,11 @@ const Navbar = () => {
           </a>
         </div>
 
-        <button className="btn">dsd</button>
+        <Link to="/detail">
+          <button className="btn shadow-none border-0 rounded-3xl bg-pink-700 text-white">
+            Admin Page
+          </button>
+        </Link>
 
         {/* <div className="dropdown dropdown-end">
           <div
