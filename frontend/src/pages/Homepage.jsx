@@ -36,8 +36,6 @@ const Homepage = () => {
           </div>
         </div>
         <FeaturedSection />
-        <h1>Explore</h1>
-        <Card />
       </header>
     </>
   );

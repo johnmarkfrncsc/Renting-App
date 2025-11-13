@@ -1,16 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Card from "../Card";
+import useEmblaCarousel from "embla-carousel-react";
 
 const FeaturedSection = () => {
   const [data, setData] = useState([]);
+  const [emblaRef] = useEmblaCarousel({
+    loop: false,
+    align: "center",
+  });
+
   const fetchRents = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/rents`);
+      const response = await axios.get("http://localhost:5000/api/rents");
       setData(response.data);
-      console.log(response.data);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching rentals:", error);
     }
   };
 
@@ -19,8 +24,7 @@ const FeaturedSection = () => {
   }, []);
 
   return (
-    <section className="px-4 py-8 md:px-8 lg:px-16  bg-neutral-100">
-      {/* Header */}
+    <section className="px-4 py-8 md:px-8 lg:px-16 bg-neutral-100">
       <div className="text-center mb-6">
         <h2 className="text-black text-2xl md:text-3xl font-semibold">
           Top-rated rentals in Manila
@@ -31,39 +35,73 @@ const FeaturedSection = () => {
         </p>
       </div>
 
-      <div className="overflow-hidden">
-        <div className="flex gap-4">
-          {data.map((data, _id) => (
-            <Card
-              key={_id}
-              title={data.rentTitle}
-              description={data.rentDescription}
-              category={data.rentCategory}
-              address={data.rentAddress}
-              price={data.rentPrice}
-              img={data.rentImageURL}
-            />
-          ))}
-        </div>
-      </div>
-      {/* Embla Carousel
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4">
-          {rentals.map((rental, _id) => (
+      <div className="embla overflow-hidden" ref={emblaRef}>
+        <div className="embla__container flex gap-6 sm:gap-8 md:gap-6">
+          {data.map((item, index) => (
             <div
-              key={_id}
-              className="flex-[0_0_80%] sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_25%]  overflow-hidden shadow-lg"
+              key={index}
+              className="
+                embla__slide
+                flex-[0_0_80%]
+                sm:flex-[0_0_45%]
+                md:flex-[0_0_30%]
+                lg:flex-[0_0_25%]
+                flex 
+                justify-center
+              "
             >
-              <img
-                src={rental.image}
-                alt={`Featured ${_id + 1}`}
-                className="w-full h-64 md:h-80 lg:h-96 object-cover transition-transform duration-300 rounded-2xl hover:scale-105 "
-              />
-              <h2 className="text-black mt-4">{rental.rentTitle}</h2>
+              <div
+                className="
+                  w-full 
+                  bg-white 
+                  rounded-2xl 
+                  shadow-md 
+                  hover:shadow-lg 
+                  transition-shadow 
+                  duration-300 
+                  overflow-hidden
+                  flex 
+                  flex-col
+                "
+              >
+                <div className="w-full">
+                  <img
+                    src={item.rentImageURL}
+                    alt={item.rentTitle}
+                    className="
+                      w-full 
+                      h-56 
+                      sm:h-64 
+                      md:h-72 
+                      lg:h-80 
+                      object-cover 
+                      rounded-t-2xl 
+                      transition-transform 
+                      duration-300 
+                      hover:scale-105
+                    "
+                  />
+                </div>
+
+                <div className="p-4 flex flex-col grow">
+                  <h3 className="text-lg font-semibold text-black mb-2 truncate">
+                    {item.rentTitle}
+                  </h3>
+                  <p className="text-sm text-neutral-600 line-clamp-2 mb-2">
+                    {item.rentDescription}
+                  </p>
+                  <div className="text-sm text-neutral-500 mb-2">
+                    {item.rentAddress}
+                  </div>
+                  <p className="text-black font-semibold mt-auto">
+                    ₱{item.rentPrice}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-      </div> */}
+      </div>
     </section>
   );
 };
