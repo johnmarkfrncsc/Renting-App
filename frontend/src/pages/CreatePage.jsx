@@ -1,10 +1,7 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { Navigate } from "react-router-dom";
 import { useCreatePost } from "../components/hooks/useCreatePost";
 
-const DetailPage = (e) => {
+const CreatePage = (e) => {
   const { formData, handleChange, handleSubmit, error, isLoading, success } =
     useCreatePost();
 
@@ -77,4 +74,4 @@ const DetailPage = (e) => {
   );
 };
 
-export default DetailPage;
+export default CreatePage;

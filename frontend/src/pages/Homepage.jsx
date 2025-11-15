@@ -1,15 +1,16 @@
-import React from "react";
 import Navbar from "../components/Navbar.jsx";
 import HeroImage from "../assets/images/HeroImage.jpg";
 import { MousePointerClick } from "lucide-react";
+import CategorySection from "../components/featured/CategorySection.jsx";
 import FeaturedSection from "../components/featured/FeaturedSection.jsx";
-import Card from "../components/Card.jsx";
+import ShowcaseSection from "../components/featured/ShowcaseSection.jsx";
+import Footer from "../components/Footer.jsx";
 
 const Homepage = () => {
   return (
     <>
       <Navbar />
-      <header className="h-screen bg-neutral-100">
+      <header className="h-screen bg-neutral-300">
         <div className="flex flex-col justify-center text-center p-4">
           <div
             className="bg-cover bg-center bg-black/50 bg-blend-overlay h-100 rounded-3xl justify-center text-left p-4 "
@@ -35,7 +36,10 @@ const Homepage = () => {
             </div>
           </div>
         </div>
+        <CategorySection />
         <FeaturedSection />
+        <ShowcaseSection />
+        <Footer />
       </header>
     </>
   );

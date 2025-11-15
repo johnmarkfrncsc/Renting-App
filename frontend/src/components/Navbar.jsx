@@ -7,13 +7,13 @@ const Navbar = () => {
     <>
       <div className="navbar bg-neutral-100 shadow-sm py-4">
         <div className="flex-1">
-          <a className="btn bg-white shadow-none border-0 text-xl text-black">
+          <a className="btn bg-transparent shadow-none border-0 text-xl text-black">
             <Shell className="text-pink-800" />
             NameHere
           </a>
         </div>
 
-        <Link to="/detail">
+        <Link to="/create">
           <button className="btn shadow-none border-0 rounded-3xl bg-pink-700 text-white">
             Admin Page
           </button>
