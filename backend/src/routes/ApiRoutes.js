@@ -1,18 +1,12 @@
 import express from "express";
-import {
-  deleteApiRent,
-  getApiRent,
-  getApiRentById,
-  postApiRent,
-  putApiRent,
-} from "../controllers/ApiControllers.js";
+import ApiController from "../controllers/ApiControllers.js";
 
 const router = express.Router();
 
-router.get("/", getApiRent);
-router.get("/:id", getApiRentById);
-router.post("/", postApiRent);
-router.put("/:id", putApiRent);
-router.delete("/:id", deleteApiRent);
+router.get("/", ApiController.getApiRent);
+router.get("/:id", ApiController.getApiRentById);
+router.post("/", ApiController.postApiRent);
+router.put("/:id", ApiController.putApiRent);
+router.delete("/:id", ApiController.deleteApiRent);
 
 export default router;
