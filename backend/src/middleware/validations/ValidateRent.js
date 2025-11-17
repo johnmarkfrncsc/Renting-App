@@ -1,6 +1,6 @@
 const ValidateRent = (req, res, next) => {
   try {
-    const requiredFields = [
+    const fieldRequired = [
       "rentTitle",
       "rentDescription",
       "rentAddress",
@@ -16,22 +16,32 @@ const ValidateRent = (req, res, next) => {
       rentImageURL: String,
       rentPrice: Number,
     };
+    const fieldLengths = {
+      rentTitle: { min: 10, max: 60 },
+      rentDescription: { min: 50, max: 250 },
+      rentCategory: { min: 5, max: 10 },
+      rentAddress: { min: 20, max: 70 },
+      rentImageURL: String,
+      rentPrice: { min: 2000, max: 30000 },
+    };
 
     //4th try
-    for (let i = 0; i < requiredFields.length; i++) {
+    for (let i = 0; i < fieldRequired.length; i++) {
       // store to looped requiredFields in 'fields'
-      const fieldName = requiredFields[i];
+      const fieldName = fieldRequired[i];
       //expectedType = looked in to fieldTypes {object} and find the type assigned to this 'fields'
       const expectedType = fieldTypes[fieldName];
-
+      const lengthRules = fieldLengths[fieldName];
       const value = req.body[fieldName];
 
+      //if exist
       if (value === undefined) {
         return res
           .status(400)
           .json({ message: `${fieldName} can't be empty field` });
       }
 
+      //Validate Type string
       if (expectedType === String) {
         if (typeof value !== "string") {
           return res
@@ -39,21 +49,42 @@ const ValidateRent = (req, res, next) => {
             .json({ message: "must input a string ex: abcd.." });
         }
 
-        const trimmedValue = value.trim();
-
+        const trimmedValue = value.trim(); //store the value that has been trim in trimmedValue
         if (trimmedValue === "") {
           return res.status(400).json({
             message: `${fieldName} can't have empty string`,
           });
         }
-      } else if (expectedType === Number) {
-        if (typeof value !== "number") {
-          return res
-            .status(400)
-            .json({ message: "must input a number ex: 12345.." });
+
+        //Validate string length
+        if (lengthRules) {
+          if (trimmedValue.length < lengthRules.min) {
+            return res.status(400).json({
+              message: `${trimmedValue} too short, minimum lenght is  ${lengthRules.min}`,
+            });
+          } else if (trimmedValue.length > lengthRules.max) {
+            return res.status(400).json({
+              message: `${trimmedValue} too long, , max lenght is  ${lengthRules.max}`,
+            });
+          }
         }
+        req.body[fieldName] = trimmedValue;
+      }
+      //Validate Type number
+      else if (expectedType === Number) {
         if (isNaN(value)) {
-          return res.status(400).json({ message: "you've input a NaN" });
+          return res.status(400).json({ message: "must input a number" });
+        }
+
+        //Validate number range
+        if (value < lengthRules.min) {
+          return res.status(400).json({
+            message: `${value} is too low, minimum: ${lengthRules.min}`,
+          });
+        } else if (value > lengthRules.max) {
+          return res.status(400).json({
+            message: `${value} is too high, minimum: ${lengthRules.max}`,
+          });
         }
       }
     }
