@@ -18,13 +18,14 @@ const ValidateRent = (req, res, next) => {
     };
     const fieldLengths = {
       rentTitle: { min: 10, max: 60 },
-      rentDescription: { min: 50, max: 250 },
-      rentCategory: { min: 5, max: 10 },
+      // rentDescription: { min: 50, max: 250 },
+
       rentAddress: { min: 20, max: 70 },
       rentImageURL: String,
       rentPrice: { min: 2000, max: 30000 },
     };
 
+    const validCategories = ["house", "apartment", "condo", "dorm"];
     //4th try
     for (let i = 0; i < fieldRequired.length; i++) {
       // store to looped requiredFields in 'fields'
@@ -42,6 +43,7 @@ const ValidateRent = (req, res, next) => {
       }
 
       //Validate Type string
+
       if (expectedType === String) {
         if (typeof value !== "string") {
           return res
@@ -68,7 +70,16 @@ const ValidateRent = (req, res, next) => {
             });
           }
         }
-        req.body[fieldName] = trimmedValue;
+        //Validation for allowed category list
+        if (fieldName === "rentCategory") {
+          if (!validCategories.includes(trimmedValue.toLowerCase())) {
+            return res.status(400).json({
+              message: `${trimmedValue} is not a valid category. Valid categories are: ${validCategories} `,
+            });
+          }
+        }
+
+        req.body[fieldName] = trimmedValue.toLowerCase();
       }
       //Validate Type number
       else if (expectedType === Number) {
