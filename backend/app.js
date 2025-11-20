@@ -3,6 +3,7 @@ import connectDB from "./src/config/mongodb.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import ApiRoutes from "./src/routes/ApiRoutes.js";
+import TestCreateRoute from "./src/routes/TestCreateRoute.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/rents", ApiRoutes);
+app.use("/test-user", TestCreateRoute);
 
 connectDB().then(() => {
   app.listen(5000, () => {
