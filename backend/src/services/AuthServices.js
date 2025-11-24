@@ -34,6 +34,31 @@ const signup = async (data) => {
   }
 };
 
+const login = async (data) => {
+  const loginUser = await User.findOne({ email: data.email });
+  if (!loginUser) {
+    return {
+      success: false,
+      message: "Email not found",
+    };
+  }
+  const passwordMatch = await bcrypt.compare(data.password, loginUser.password);
+
+  if (!passwordMatch) {
+    return {
+      success: false,
+      message: "Password does not match",
+    };
+  }
+
+  const { password, ...loginWithoutPassword } = loginUser.toObject();
+  return {
+    success: true,
+    data: loginWithoutPassword,
+  };
+};
+
 export default {
   signup,
+  login,
 };
