@@ -1,5 +1,6 @@
-import User from "../model/UserSchema.js";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import User from "../model/UserSchema.js";
 
 const signup = async (data) => {
   try {
@@ -35,27 +36,46 @@ const signup = async (data) => {
 };
 
 const login = async (data) => {
-  const loginUser = await User.findOne({ email: data.email });
-  if (!loginUser) {
+  try {
+    const loginUser = await User.findOne({ email: data.email });
+    if (!loginUser) {
+      return {
+        success: false,
+        message: "Email not found",
+      };
+    }
+    const passwordMatch = await bcrypt.compare(
+      data.password,
+      loginUser.password
+    );
+
+    if (!passwordMatch) {
+      return {
+        success: false,
+        message: "Password does not match",
+      };
+    }
+
+    const { password, ...loginWithoutPassword } = loginUser.toObject();
+
+    const token = jwt.sign(
+      { id: loginUser._id, role: loginUser.role },
+      process.env.JWT_SECRET, //secret key in env
+      { expiresIn: process.env.JWT_EXPIRES_IN || "7d" } //token expiry in env
+    );
+
+    return {
+      success: true,
+      token,
+      data: loginWithoutPassword,
+    };
+  } catch (error) {
     return {
       success: false,
-      message: "Email not found",
+      message: "Error in login service",
+      data: null,
     };
   }
-  const passwordMatch = await bcrypt.compare(data.password, loginUser.password);
-
-  if (!passwordMatch) {
-    return {
-      success: false,
-      message: "Password does not match",
-    };
-  }
-
-  const { password, ...loginWithoutPassword } = loginUser.toObject();
-  return {
-    success: true,
-    data: loginWithoutPassword,
-  };
 };
 
 export default {
