@@ -1,4 +1,3 @@
-import rentSchema from "../model/RentSchema.js";
 import ApiServices from "../services/ApiServices.js";
 
 const getApiRent = async (req, res) => {
@@ -90,7 +89,7 @@ const postApiRent = async (req, res) => {
     });
   } catch (error) {
     console.log("Error in creating new rent", error);
-    res.status(500).json({ message: "Error in create request" });
+    res.status(500).json({ message: "Error in post request" });
   }
 };
 
