@@ -1,6 +1,6 @@
 import express from "express";
 import ApiController from "../controllers/ApiControllers.js";
-import ValidateRent from "../middleware/validations/ValidateRent.js";
+import ValidateRent from "../middleware/validations/RentValidation.js";
 
 const router = express.Router();
 
