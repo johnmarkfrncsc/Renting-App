@@ -102,7 +102,7 @@ const ValidateRent = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log("Error in validation line 9");
+    console.log("Error in validation");
     res.status(500).json({ message: "Error in validation middleware" });
   }
 };
