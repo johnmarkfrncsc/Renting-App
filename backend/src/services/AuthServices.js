@@ -66,8 +66,7 @@ const login = async (data) => {
 
     return {
       success: true,
-      token,
-      data: loginWithoutPassword,
+      data: token,
     };
   } catch (error) {
     return {
