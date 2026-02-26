@@ -5,7 +5,7 @@ import AuthValidation from "../middleware/validations/AuthValidation.js";
 const router = express.Router();
 
 router.post("/signup", AuthController.signup);
-router.post("/login", AuthValidation, AuthController.login);
+router.post("/login", AuthController.login);
 
 export default router;
 
