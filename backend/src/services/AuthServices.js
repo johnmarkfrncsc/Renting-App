@@ -3,6 +3,12 @@ import bcrypt from "bcrypt";
 import User from "../model/UserSchema.js";
 
 const signup = async (data) => {
+  if (!data.password || data.password.trim().length < 8) {
+    return {
+      success: false,
+      message: "Password must be at least 8 characters long",
+    };
+  }
   try {
     const existingUser = await User.findOne({ email: data.email });
     if (existingUser) {
@@ -27,11 +33,16 @@ const signup = async (data) => {
       data: userWithoutPassword,
     };
   } catch (error) {
-    return {
-      success: false,
-      message: "Error in signup service",
-      data: null,
-    };
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
+      return {
+        success: false,
+        message: messages,
+        data: null,
+      };
+    }
   }
 };
 
@@ -46,7 +57,7 @@ const login = async (data) => {
     }
     const passwordMatch = await bcrypt.compare(
       data.password,
-      loginUser.password
+      loginUser.password,
     );
 
     if (!passwordMatch) {
@@ -56,12 +67,10 @@ const login = async (data) => {
       };
     }
 
-    const { password, ...loginWithoutPassword } = loginUser.toObject();
-
     const token = jwt.sign(
       { id: loginUser._id, role: loginUser.role },
       process.env.JWT_SECRET, //secret key in env
-      { expiresIn: process.env.JWT_EXPIRES_IN || "7d" } //token expiry in env
+      { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }, //token expiry in env
     );
 
     return {
