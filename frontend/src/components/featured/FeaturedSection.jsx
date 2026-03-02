@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Card from "../Card";
 import useEmblaCarousel from "embla-carousel-react";
 
 const FeaturedSection = () => {
@@ -13,7 +12,8 @@ const FeaturedSection = () => {
   const fetchRents = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/rents");
-      setData(response.data);
+      const rents = response.data?.data;
+      setData(Array.isArray(rents) ? rents : []);
     } catch (error) {
       console.error("Error fetching rentals:", error);
     }
