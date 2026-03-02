@@ -29,7 +29,7 @@ const LoginPage = () => {
       });
 
       if (response?.data?.success) {
-        login(response.data.token);
+        login(response.data.token, response.data.data);
         navigate("/");
       } else {
         setError(response?.data?.message || "Login Failed");

@@ -73,9 +73,12 @@ const login = async (data) => {
       { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }, //token expiry in env
     );
 
+    const { password, ...userWithoutPassword } = loginUser.toObject();
+
     return {
       success: true,
-      data: token,
+      token,
+      data: userWithoutPassword,
     };
   } catch (error) {
     return {
