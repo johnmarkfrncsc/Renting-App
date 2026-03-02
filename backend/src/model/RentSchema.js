@@ -8,6 +8,7 @@ const rentSchema = new mongoose.Schema(
     rentCategory: { type: String },
     rentPrice: { type: Number },
     rentImageURL: { type: String },
+    userId: { type: String, required: true },
   },
   { timestamps: true }
 );
