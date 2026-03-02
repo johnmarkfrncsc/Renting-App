@@ -9,8 +9,10 @@ import {
   Users,
   Menu,
   X,
+  Search,
   Plus,
   Download,
+  MoreHorizontal,
   LogOut,
 } from "lucide-react";
 
@@ -55,13 +57,12 @@ const AdminPage = () => {
             <Menu size={24} />
           </button>
           <h2 className="text-lg font-bold">Portfolio</h2>
-          <div className="w-6" />
+          <div className="w-6" /> {/* Spacer for centering */}
         </header>
 
-        {/* Content Area */}
         <div className="flex-1 overflow-y-auto p-4 md:p-8">
-          {/* Header with Title & Actions */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          {/* Desktop Title & Actions */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <h2 className="hidden md:block text-3xl font-bold text-gray-900">
               Portfolio
             </h2>

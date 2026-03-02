@@ -6,7 +6,7 @@ import CreatePage from "./pages/CreatePage.jsx";
 import ListingPage from "./pages/ListingPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
-import PrivateRoute from "./routes/PrivateRoutes.jsx";
+import PrivateRoute from "./routes/PrivateRoute.jsx";
 
 function App() {
   return (
