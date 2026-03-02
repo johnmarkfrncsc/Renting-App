@@ -17,6 +17,11 @@ app.use("/api/rents", ApiRoutes);
 app.use("/api/users", UserRoutes);
 app.use("/api/auth", AuthRoutess);
 
+// https://localhost:5000/api/auth/login  => loging in
+// https://localhost:5000/api/auth/signup  => signing up
+// https://localhost:5000/api/users  => get all users
+// https://localhost:5000/api/rents  => get all rents
+
 connectDB().then(() => {
   app.listen(5000, () => {
     console.log("Server is running on port http://localhost:5000");
