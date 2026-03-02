@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import {
   LayoutDashboard,
   Building2,
-  Key,
   Users,
-  Wallet,
-  Wrench,
   Menu,
   X,
   Search,
   Plus,
-  Filter,
   Download,
   MoreHorizontal,
+  LogOut,
 } from "lucide-react";
 
 const AdminPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div className="flex h-screen bg-gray-50 text-gray-800 font-sans overflow-hidden">
@@ -51,6 +57,11 @@ const AdminPage = () => {
           <NavItem icon={<LayoutDashboard size={18} />} label="Overview" />
           <NavItem icon={<Building2 size={18} />} label="Portfolio" active />
           <NavItem icon={<Users size={18} />} label="People" />
+          <NavItem
+            icon={<LogOut size={18} />}
+            label="Log out"
+            onClick={handleLogout}
+          />
         </nav>
       </aside>
 
@@ -144,9 +155,10 @@ const AdminPage = () => {
 };
 
 // Sub-components
-const NavItem = ({ icon, label, active = false }) => (
+const NavItem = ({ icon, label, active = false, onClick }) => (
   <button
     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium ${active ? "bg-gray-100 text-gray-900" : "text-gray-500 hover:bg-gray-50"}`}
+    onClick={onClick}
   >
     {icon} {label}
   </button>

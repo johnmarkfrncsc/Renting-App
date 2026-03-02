@@ -37,18 +37,13 @@ const LoginPage = () => {
         console.log("User data stored:", userData);
 
         // test verify role value
-        console.log(
-          "Role value:",
-          userData.role,
-          "Type:",
-          typeof userData.role,
-        );
+        console.log("Role value:", userData.role);
 
         if (userData.role === "admin") {
           console.log("Navigating to admin");
           navigate("/admin");
         } else {
-          console.log("Navigating to home, role was:", userData.role);
+          console.log("Navigating to home");
           navigate("/");
         }
       } else {
