@@ -27,8 +27,9 @@ const login = async (req, res) => {
     res.status(200).json({
       success: true,
       message: `You've successfully log in`,
-      token: result.data, // token returned from AuthServices.login is in result.data
-      data: null,
+      token: result.data.token,
+      role: result.data.role,
+      id: result.data.id,
     });
   } catch (error) {
     console.log("Error in logging in", error);

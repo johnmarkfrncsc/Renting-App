@@ -29,8 +29,28 @@ const LoginPage = () => {
       });
 
       if (response?.data?.success) {
-        login(response.data.token);
-        navigate("/");
+        const userData = login(
+          response.data.token,
+          response.data.role,
+          response.data.id,
+        );
+        console.log("User data stored:", userData);
+
+        // test verify role value
+        console.log(
+          "Role value:",
+          userData.role,
+          "Type:",
+          typeof userData.role,
+        );
+
+        if (userData.role === "admin") {
+          console.log("Navigating to admin");
+          navigate("/admin");
+        } else {
+          console.log("Navigating to home, role was:", userData.role);
+          navigate("/");
+        }
       } else {
         setError(response?.data?.message || "Login Failed");
       }
@@ -66,7 +86,9 @@ const LoginPage = () => {
                   name="email"
                   type="email"
                   required
-                  className="appearance-none block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className={`text-black block w-full px-3 py-2 border rounded-md ${
+                    error ? "border-red-500" : "border-gray-300"
+                  }`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -86,10 +108,17 @@ const LoginPage = () => {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   required
-                  className="appearance-none block w-full px-3 py-2 pr-10 border text-black border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  value={password}
+                  className={`text-black block w-full px-3 py-2 border rounded-md ${
+                    error ? "border-red-500" : "border-gray-300"
+                  }`}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                {/* 🔴 Inline Error Message */}
+                {error && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Email or password is invalid
+                  </p>
+                )}
 
                 <button
                   type="button"
