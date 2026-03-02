@@ -75,7 +75,11 @@ const login = async (data) => {
 
     return {
       success: true,
-      data: token,
+      data: {
+        token,
+        role: loginUser.role,
+        id: loginUser._id,
+      },
     };
   } catch (error) {
     return {

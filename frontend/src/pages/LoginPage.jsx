@@ -43,7 +43,6 @@ const LoginPage = () => {
           console.log("Navigating to admin");
           navigate("/admin");
         } else {
-          console.log("Navigating to home");
           navigate("/");
         }
       } else {

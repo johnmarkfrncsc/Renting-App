@@ -137,7 +137,9 @@ const PropertyRow = ({ property }) => (
         ) : (
           <div className="w-8 h-8 bg-gray-200 rounded shrink-0"></div>
         )}
-        <span className="font-semibold truncate">{property.rentTitle}</span>
+        <span className="font-semibold truncate capitalize">
+          {property.rentTitle}
+        </span>
       </div>
     </td>
     <td className="px-6 py-4 text-gray-600 text-sm">
