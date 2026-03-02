@@ -25,7 +25,14 @@ const ValidateRent = (req, res, next) => {
       rentPrice: { min: 2000, max: 30000 },
     };
 
-    const validCategories = ["house", "apartment", "condo", "dorm"];
+    const validCategories = [
+      "house",
+      "unit 1br",
+      "unit 2br",
+      "unitpenthouse",
+      "room",
+      "dorm",
+    ];
     //4th try
     for (let i = 0; i < fieldRequired.length; i++) {
       // store to looped requiredFields in 'fields'

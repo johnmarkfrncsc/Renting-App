@@ -76,8 +76,9 @@ const getApiRentById = async (req, res) => {
 const postApiRent = async (req, res) => {
   try {
     const data = req.body;
+    const userId = req.user.id;
 
-    const result = await ApiServices.postApiRent(data);
+    const result = await ApiServices.postApiRent({ ...data, userId });
 
     if (!result.success) {
       return res.status(400).json({ message: result.message });
