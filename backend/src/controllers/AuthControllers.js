@@ -27,8 +27,8 @@ const login = async (req, res) => {
     res.status(200).json({
       success: true,
       message: `You've successfully log in`,
-      token: result.token, // important for jwt
-      data: result.data,
+      token: result.data, // token returned from AuthServices.login is in result.data
+      data: null,
     });
   } catch (error) {
     console.log("Error in logging in", error);
