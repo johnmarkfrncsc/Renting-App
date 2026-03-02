@@ -20,7 +20,7 @@ const LoginPage = () => {
     console.log("Login with :", { email, password });
 
     setLoading(true);
-    setError("Email or password is invalid");
+    setError("");
 
     try {
       const response = await api.post("/auth/login", {
@@ -29,8 +29,28 @@ const LoginPage = () => {
       });
 
       if (response?.data?.success) {
-        login(response.data.token, response.data.data);
-        navigate("/");
+        const userData = login(
+          response.data.token,
+          response.data.role,
+          response.data.id,
+        );
+        console.log("User data stored:", userData);
+
+        // test verify role value
+        console.log(
+          "Role value:",
+          userData.role,
+          "Type:",
+          typeof userData.role,
+        );
+
+        if (userData.role === "admin") {
+          console.log("Navigating to admin");
+          navigate("/admin");
+        } else {
+          console.log("Navigating to home, role was:", userData.role);
+          navigate("/");
+        }
       } else {
         setError(response?.data?.message || "Login Failed");
       }
