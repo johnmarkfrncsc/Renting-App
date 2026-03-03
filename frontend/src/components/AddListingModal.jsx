@@ -6,6 +6,7 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
     rentTitle: "",
     rentDescription: "",
     rentCategory: "",
+    rentStatus: "",
     rentPrice: "",
     rentAddress: "",
     rentImageURL: "",
@@ -19,6 +20,8 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
     "Room",
     "Dorm",
   ];
+
+  const rentStatus = ["Occupied", "Vacant", "Under Renovation"];
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -39,6 +42,7 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
       !formData.rentTitle ||
       !formData.rentDescription ||
       !formData.rentCategory ||
+      !formData.rentStatus ||
       !formData.rentPrice ||
       !formData.rentAddress
     ) {
@@ -59,6 +63,7 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
           rentTitle: "",
           rentDescription: "",
           rentCategory: "",
+          rentStatus: "",
           rentPrice: "",
           rentAddress: "",
           rentImageURL: "",
@@ -166,6 +171,26 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
               {rentCategories.map((category) => (
                 <option key={category} value={category}>
                   {category}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Rent Category */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Status <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="rentStatus"
+              value={formData.rentStatus}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all bg-white"
+            >
+              <option value="">Status</option>
+              {rentStatus.map((status) => (
+                <option key={status} value={status}>
+                  {status}
                 </option>
               ))}
             </select>

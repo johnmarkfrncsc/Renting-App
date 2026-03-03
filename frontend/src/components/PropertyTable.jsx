@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { Search, MoreHorizontal, Loader, AlertCircle } from "lucide-react";
 import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
+import { useModal } from "./hooks/useModal";
+import ViewPropertyModal from "./ViewPropertyModal";
 
 const PropertyTable = ({ refreshTrigger }) => {
   const { user } = useContext(AuthContext);
@@ -10,6 +12,10 @@ const PropertyTable = ({ refreshTrigger }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Modal state
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   // Fetch user's properties
   useEffect(() => {
@@ -23,7 +29,6 @@ const PropertyTable = ({ refreshTrigger }) => {
         const response = await api.get("/rents");
 
         if (response.data.success) {
-          // Filter properties by userId
           const userProperties = response.data.data.filter(
             (property) => property.userId === user.id,
           );
@@ -62,7 +67,7 @@ const PropertyTable = ({ refreshTrigger }) => {
 
   return (
     <>
-      {/* Filter Bar - Responsive Stack */}
+      {/* Filter Bar */}
       <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6 flex flex-col lg:flex-row gap-4 lg:items-center justify-between">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
@@ -76,7 +81,7 @@ const PropertyTable = ({ refreshTrigger }) => {
         </div>
       </div>
 
-      {/* Table Container - Horizontal Scroll on Mobile */}
+      {/* Table */}
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
         {isLoading && (
           <div className="flex items-center justify-center p-8">
@@ -119,18 +124,38 @@ const PropertyTable = ({ refreshTrigger }) => {
               </thead>
               <tbody className="divide-y divide-gray-100 text-sm">
                 {filteredProperties.map((property) => (
-                  <PropertyRow key={property._id} property={property} />
+                  <PropertyRow
+                    key={property._id}
+                    property={property}
+                    onView={() => {
+                      setSelectedProperty(property);
+                      openModal();
+                    }}
+                  />
                 ))}
               </tbody>
             </table>
           </div>
         )}
       </div>
+
+      {/* View/Edit Modal */}
+      {selectedProperty && (
+        <ViewPropertyModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            closeModal();
+            setSelectedProperty(null);
+          }}
+          property={selectedProperty}
+        />
+      )}
     </>
   );
 };
 
-const PropertyRow = ({ property }) => (
+// Row Component
+const PropertyRow = ({ property, onView }) => (
   <tr className="hover:bg-gray-50 transition-colors capitalize">
     <td className="px-6 py-4">
       <div className="flex items-center gap-3">
@@ -157,7 +182,7 @@ const PropertyRow = ({ property }) => (
       <span className="truncate block">{property.rentCategory}</span>
     </td>
     <td className="px-6 py-4 text-gray-600 text-sm">
-      <span className="truncate block">Occupied</span>
+      <span className="truncate block">{property.rentStatus}</span>
     </td>
     <td className="px-6 py-4 font-bold text-green-700">
       ${property.rentPrice.toLocaleString()}
@@ -166,10 +191,12 @@ const PropertyRow = ({ property }) => (
       <span className="truncate block">Tenant</span>
     </td>
     <td className="px-6 py-4 text-right flex justify-end gap-2">
-      <button className="bg-black text-white px-3 py-1 rounded text-xs cursor-pointer hover:bg-gray-800 transition-colors">
+      <button
+        className="bg-black text-white px-3 py-1 rounded text-xs cursor-pointer hover:bg-gray-800 transition-colors"
+        onClick={onView}
+      >
         View
       </button>
-
       <button className="md:hidden p-1 border rounded text-gray-400 hover:bg-gray-50 transition-colors">
         <MoreHorizontal size={16} />
       </button>

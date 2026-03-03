@@ -5,6 +5,7 @@ const ValidateRent = (req, res, next) => {
       "rentDescription",
       "rentAddress",
       "rentCategory",
+      "rentStatus",
       "rentPrice",
       "rentImageURL",
     ];
@@ -12,6 +13,7 @@ const ValidateRent = (req, res, next) => {
       rentTitle: String,
       rentDescription: String,
       rentCategory: String,
+      rentStatus: String,
       rentAddress: String,
       rentImageURL: String,
       rentPrice: Number,
@@ -33,6 +35,8 @@ const ValidateRent = (req, res, next) => {
       "room",
       "dorm",
     ];
+
+    const validStatus = ["Occupied", "Vacant", "Under Renovation"];
     //4th try
     for (let i = 0; i < fieldRequired.length; i++) {
       // store to looped requiredFields in 'fields'
