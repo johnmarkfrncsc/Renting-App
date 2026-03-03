@@ -15,7 +15,7 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
     "House",
     "Unit 1BR",
     "Unit 2BR",
-    "UnitPenthouse",
+    "Unit Penthouse",
     "Room",
     "Dorm",
   ];
@@ -35,7 +35,6 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
     if (
       !formData.rentTitle ||
       !formData.rentDescription ||
@@ -56,7 +55,6 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
       });
 
       if (response.data.success || response.status === 201) {
-        // Reset form
         setFormData({
           rentTitle: "",
           rentDescription: "",
@@ -66,12 +64,7 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
           rentImageURL: "",
         });
 
-        // Call callback if provided
-        if (onListingAdded) {
-          onListingAdded();
-        }
-
-        // Close modal
+        if (onListingAdded) onListingAdded();
         onClose();
       }
     } catch (err) {
@@ -88,37 +81,40 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
       {/* Modal Container */}
-      <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl p-8 mx-4">
-        {/* Top Header & "X" Close Button */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 leading-tight">
+      <div
+        className="
+          relative w-full
+          max-w-sm
+          sm:max-w-md
+          md:max-w-md
+          lg:max-w-lg
+          bg-white
+          rounded-2xl
+          shadow-2xl
+          flex flex-col
+          max-h-[90vh]
+          
+          overflow-hidden
+        "
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center p-6 border-b">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900">
             Add Unit Listing
           </h2>
+
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            ✕
           </button>
         </div>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          {/* Error Message */}
+        {/* Scrollable Form */}
+        <form className="space-y-5 p-6 overflow-y-auto" onSubmit={handleSubmit}>
           {error && (
             <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
               {error}
@@ -133,10 +129,10 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
             <input
               type="text"
               name="rentTitle"
+              placeholder="e.g. Modern Studio at Blue Sky Towers"
               value={formData.rentTitle}
               onChange={handleInputChange}
-              placeholder="e.g. Modern Studio at Blue Sky Towers"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
             />
           </div>
 
@@ -148,10 +144,10 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
             <textarea
               rows="3"
               name="rentDescription"
+              placeholder="Tell us about the unit..."
               value={formData.rentDescription}
               onChange={handleInputChange}
-              placeholder="Tell us about the unit..."
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all resize-none"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all resize-none"
             />
           </div>
 
@@ -164,9 +160,7 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
               name="rentCategory"
               value={formData.rentCategory}
               onChange={handleInputChange}
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 
-             focus:outline-none focus:ring-2 focus:ring-black/5 
-             focus:border-black transition-all bg-white"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all bg-white"
             >
               <option value="">Select category</option>
               {rentCategories.map((category) => (
@@ -177,36 +171,35 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
             </select>
           </div>
 
-          {/* Rent Price & Rent URL (Two Columns) */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
+          {/* Price & Image URL */}
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* Price */}
+            <div className="flex-1">
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                 Price (Monthly) <span className="text-red-500">*</span>
               </label>
-              <div className="relative">
-                <span className="absolute left-4 top-2.5 text-gray-400">$</span>
-                <input
-                  type="number"
-                  name="rentPrice"
-                  value={formData.rentPrice}
-                  onChange={handleInputChange}
-                  placeholder="0.00"
-                  step="0.01"
-                  className="w-full pl-8 pr-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
-                />
-              </div>
+              <input
+                type="number"
+                name="rentPrice"
+                placeholder="₱ 15000.00"
+                value={formData.rentPrice}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
+              />
             </div>
-            <div>
+
+            {/* Image URL */}
+            <div className="flex-1">
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                 Image URL
               </label>
               <input
                 type="url"
                 name="rentImageURL"
+                placeholder="https://..."
                 value={formData.rentImageURL}
                 onChange={handleInputChange}
-                placeholder="https://..."
-                className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
+                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
               />
             </div>
           </div>
@@ -219,37 +212,30 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
             <input
               type="text"
               name="rentAddress"
+              placeholder="Street, City, Zip, Country"
               value={formData.rentAddress}
               onChange={handleInputChange}
-              placeholder="Street, City, Zip, Country"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
             />
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center justify-end space-x-3 pt-6 mt-6 border-t border-gray-100">
+          {/* Buttons */}
+          <div className="flex items-center justify-end space-x-3 pt-6 border-t">
             <button
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="px-6 py-2.5 text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-50"
+              className="px-5 py-2.5 text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
+
             <button
               type="submit"
               disabled={isLoading}
-              className="px-6 py-2.5 text-sm font-bold text-white bg-[#1A1A1A] rounded-lg hover:bg-black transition-all shadow-sm flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-2.5 text-sm font-bold text-white bg-[#1A1A1A] rounded-lg hover:bg-black transition-all shadow-sm disabled:opacity-50"
             >
-              {isLoading ? (
-                <>
-                  <span className="mr-2 animate-spin">⏳</span> Creating...
-                </>
-              ) : (
-                <>
-                  <span className="mr-2 text-lg">+</span> Add Property
-                </>
-              )}
+              {isLoading ? "Creating..." : "Add Property"}
             </button>
           </div>
         </form>

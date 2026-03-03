@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import AddListingModal from "../components/AddListingModal";
 import PropertyTable from "../components/PropertyTable";
+import { useModal } from "../components/hooks/useModal";
 import {
   LayoutDashboard,
   Building2,
@@ -18,7 +19,7 @@ import {
 
 const AdminPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -71,8 +72,8 @@ const AdminPage = () => {
                 <Download size={16} /> Import
               </button>
               <button
-                onClick={() => setIsModalOpen(true)}
-                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-900 transition-colors"
+                onClick={openModal}
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 cursor-pointer bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-900 transition-colors"
               >
                 <Plus size={16} /> Add Property
               </button>
@@ -87,7 +88,7 @@ const AdminPage = () => {
       {/* Add Listing Modal */}
       <AddListingModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={closeModal}
         onListingAdded={handleListingAdded}
       />
     </div>
@@ -114,9 +115,9 @@ const Sidebar = ({ isMenuOpen, onClose, handleLogout }) => (
       </button>
     </div>
 
-    <nav className="px-4 space-y-1">
+    <nav className="px-4 space-y-1 **:text-black **:hover:bg-gray-500 **:hover:text-white">
       <NavItem icon={<LayoutDashboard size={18} />} label="Overview" />
-      <NavItem icon={<Building2 size={18} />} label="Portfolio" active />
+      <NavItem icon={<Building2 size={18} />} label="Portfolio" />
       <NavItem icon={<Users size={18} />} label="People" />
       <NavItem
         icon={<LogOut size={18} />}
