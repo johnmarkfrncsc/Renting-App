@@ -15,7 +15,7 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
     "House",
     "Unit 1BR",
     "Unit 2BR",
-    "UnitPenthouse",
+    "Unit Penthouse",
     "Room",
     "Dorm",
   ];

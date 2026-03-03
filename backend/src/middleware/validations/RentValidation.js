@@ -29,7 +29,7 @@ const ValidateRent = (req, res, next) => {
       "house",
       "unit 1br",
       "unit 2br",
-      "unitpenthouse",
+      "unit penthouse",
       "room",
       "dorm",
     ];

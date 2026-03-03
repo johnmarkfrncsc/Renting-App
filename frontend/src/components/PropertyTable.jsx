@@ -106,8 +106,14 @@ const PropertyTable = ({ refreshTrigger }) => {
               <thead className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500">
                 <tr>
                   <th className="px-6 py-4 uppercase">Property</th>
-                  <th className="px-6 py-4 uppercase">Address</th>
-                  <th className="px-6 py-4 uppercase">Market Rent</th>
+                  <th className="px-6 py-4 uppercase">Type</th>
+                  <th className="px-6 py-4 uppercase">Status</th>
+                  <th className="px-6 py-4 uppercase whitespace-nowrap">
+                    Market Rent
+                  </th>
+                  <th className="px-6 py-4 uppercase whitespace-nowrap">
+                    Tenant Name
+                  </th>
                   <th className="px-6 py-4 uppercase text-right">Action</th>
                 </tr>
               </thead>
@@ -137,21 +143,33 @@ const PropertyRow = ({ property }) => (
         ) : (
           <div className="w-8 h-8 bg-gray-200 rounded shrink-0"></div>
         )}
-        <span className="font-semibold truncate capitalize">
-          {property.rentTitle}
-        </span>
+        <div className="flex flex-col min-w-0">
+          <span className="font-semibold text-sm text-gray-900 truncate capitalize">
+            {property.rentTitle}
+          </span>
+          <span className="text-xs text-gray-500 truncate">
+            {property.rentAddress}
+          </span>
+        </div>
       </div>
     </td>
+    <td className="px-6 py-4 text-gray-900 text-sm font-semibold">
+      <span className="truncate block">{property.rentCategory}</span>
+    </td>
     <td className="px-6 py-4 text-gray-600 text-sm">
-      <span className="truncate block">{property.rentAddress}</span>
+      <span className="truncate block">Occupied</span>
     </td>
     <td className="px-6 py-4 font-bold text-green-700">
       ${property.rentPrice.toLocaleString()}
     </td>
+    <td className="px-6 py-4 text-gray-900 text-sm font-semibold">
+      <span className="truncate block">Tenant</span>
+    </td>
     <td className="px-6 py-4 text-right flex justify-end gap-2">
-      <button className="bg-black text-white px-3 py-1 rounded text-xs hover:bg-gray-800 transition-colors">
+      <button className="bg-black text-white px-3 py-1 rounded text-xs cursor-pointer hover:bg-gray-800 transition-colors">
         View
       </button>
+
       <button className="md:hidden p-1 border rounded text-gray-400 hover:bg-gray-50 transition-colors">
         <MoreHorizontal size={16} />
       </button>
