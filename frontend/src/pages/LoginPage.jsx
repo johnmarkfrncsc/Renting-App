@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import api from "../api/axios.js";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { Eye, EyeOff } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginPage = () => {
   const { login } = useContext(AuthContext);
@@ -32,10 +32,8 @@ const LoginPage = () => {
           response.data.id,
         );
         if (userData.role === "admin") {
-          console.log("Navigating to admin");
           navigate("/admin");
         } else {
-          console.log("Navigating to home");
           navigate("/");
         }
       } else {
@@ -100,7 +98,6 @@ const LoginPage = () => {
                   }`}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                {/* 🔴 Inline Error Message */}
                 {error && (
                   <p className="mt-2 text-sm text-red-600">
                     Email or password is invalid
@@ -158,6 +155,17 @@ const LoginPage = () => {
               </button>
             </div>
           </form>
+
+          {/* Sign up link */}
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Sign up here
+            </Link>
+          </p>
         </div>
       </div>
     </div>
