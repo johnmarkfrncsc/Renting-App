@@ -7,6 +7,7 @@ import ListingPage from "./pages/ListingPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import PrivateRoute from "./routes/PrivateRoute.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="/create" element={<CreatePage />} />
           <Route path="/list" element={<ListingPage />} />
         </Routes>

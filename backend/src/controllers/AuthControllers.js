@@ -8,8 +8,11 @@ const signup = async (req, res) => {
       return res.status(400).json({ message: result.message });
     }
     res.status(201).json({
+      success: true,
       message: "successfully sign up",
-      data: result.data,
+      token: result.data.token,
+      role: result.data.role,
+      id: result.data.id,
     });
   } catch (error) {
     console.log("Error in signing up", error);

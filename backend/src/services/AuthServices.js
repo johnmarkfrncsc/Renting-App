@@ -28,9 +28,19 @@ const signup = async (data) => {
     const savedUser = await user.save();
     const { password, ...userWithoutPassword } = savedUser.toObject();
 
+    const token = jwt.sign(
+      { id: savedUser._id, role: savedUser.role },
+      process.env.JWT_SECRET, //secret key in env
+      { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }, //token expiry in env
+    );
+
     return {
       success: true,
-      data: userWithoutPassword,
+      data: {
+        token,
+        role: savedUser.role,
+        id: savedUser._id,
+      },
     };
   } catch (error) {
     if (error.name === "ValidationError") {
