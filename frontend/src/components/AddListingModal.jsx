@@ -13,15 +13,15 @@ const AddListingModal = ({ isOpen, onClose, onListingAdded }) => {
   });
 
   const rentCategories = [
-    "House",
-    "Unit 1BR",
-    "Unit 2BR",
-    "Unit Penthouse",
-    "Room",
-    "Dorm",
+    "house",
+    "unit 1br",
+    "unit 2br",
+    "unit Penthouse",
+    "room",
+    "dorm",
   ];
 
-  const rentStatus = ["Occupied", "Vacant", "Under Renovation"];
+  const rentStatus = ["occupied", "vacant", "under renovation"];
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");

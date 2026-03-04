@@ -4,18 +4,30 @@ import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
 import { useModal } from "./hooks/useModal";
 import ViewPropertyModal from "./ViewPropertyModal";
+import DeleteConfirmModal from "./DeleteConfirmModal";
 
 const PropertyTable = ({ refreshTrigger }) => {
   const { user } = useContext(AuthContext);
-  const [properties, setProperties] = useState([]);
-  const [filteredProperties, setFilteredProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredProperties, setFilteredProperties] = useState([]);
+  const [properties, setProperties] = useState([]);
+  const [propertyToDelete, setPropertyToDelete] = useState(null);
 
   // Modal state
   const [selectedProperty, setSelectedProperty] = useState(null);
-  const { isModalOpen, openModal, closeModal } = useModal();
+  const {
+    isModalOpen: isViewModalOpen,
+    openModal: openViewModal,
+    closeModal: closeViewModal,
+  } = useModal();
+
+  const {
+    isModalOpen: isDeleteModalOpen,
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
+  } = useModal();
 
   // Fetch user's properties
   const fetchUserProperties = async () => {
@@ -49,7 +61,7 @@ const PropertyTable = ({ refreshTrigger }) => {
 
   useEffect(() => {
     fetchUserProperties();
-  }, [selectedProperty]);
+  }, [selectedProperty, refreshTrigger]);
 
   // Handle search
   useEffect(() => {
@@ -129,7 +141,11 @@ const PropertyTable = ({ refreshTrigger }) => {
                     property={property}
                     onView={() => {
                       setSelectedProperty(property);
-                      openModal();
+                      openViewModal();
+                    }}
+                    onDelete={() => {
+                      setPropertyToDelete(property);
+                      openDeleteModal();
                     }}
                   />
                 ))}
@@ -142,13 +158,26 @@ const PropertyTable = ({ refreshTrigger }) => {
       {/* View/Edit Modal */}
       {selectedProperty && (
         <ViewPropertyModal
-          isOpen={isModalOpen}
+          isOpen={isViewModalOpen}
           onClose={() => {
-            closeModal();
+            closeViewModal();
             setSelectedProperty(null);
           }}
           property={selectedProperty}
           onUpdate={fetchUserProperties}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {propertyToDelete && (
+        <DeleteConfirmModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => {
+            closeDeleteModal();
+            setPropertyToDelete(null);
+          }}
+          property={propertyToDelete}
+          onDelete={fetchUserProperties}
         />
       )}
     </>
@@ -160,7 +189,7 @@ const statusColor = {
   vacant: "text-yellow-600 bg-yellow-700/20 rounded-sm px-3 py-2",
 };
 // Row Component
-const PropertyRow = ({ property, onView }) => (
+const PropertyRow = ({ property, onView, onDelete }) => (
   <tr className="hover:bg-gray-50 transition-colors capitalize">
     <td className="px-6 py-4">
       <div className="flex items-center gap-3">
@@ -205,6 +234,12 @@ const PropertyRow = ({ property, onView }) => (
         onClick={onView}
       >
         View
+      </button>
+      <button
+        className="bg-red-500 text-white px-3 py-1 rounded text-xs cursor-pointer hover:bg-gray-800 transition-colors"
+        onClick={onDelete}
+      >
+        Delete
       </button>
       <button className="md:hidden p-1 border rounded text-gray-400 hover:bg-gray-50 transition-colors">
         <MoreHorizontal size={16} />
