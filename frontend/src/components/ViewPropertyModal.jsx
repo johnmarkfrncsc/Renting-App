@@ -1,20 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../api/axios";
 
 const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
+  // Viewing/editing state
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({ ...property });
+  const [formData, setFormData] = useState(() =>
+    property ? { ...property } : {},
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const rentCategories = [
-    "House",
-    "Unit 1BR",
-    "Unit 2BR",
-    "Unit Penthouse",
-    "Room",
-    "Dorm",
+  const rentCategory = [
+    "house",
+    "unit 1BR",
+    "unit 2BR",
+    "unit penthouse",
+    "room",
+    "dorm",
   ];
+
+  const rentStatus = ["occupied", "vacant", "under renovation"];
+
+  // Sync formData with property prop when it changes
+  useEffect(() => {
+    if (property) {
+      setFormData({ ...property });
+      setIsEditing(false);
+      setError("");
+    }
+  }, [property?._id]);
 
   if (!isOpen || !property) return null;
 
@@ -24,21 +38,26 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
     setError("");
   };
 
+  // Handle Close/Cancel - Reset everything and close modal
+  const handleCloseModal = () => {
+    setFormData({ ...property }); // Reset form to original property data
+    setError(""); // Clear any error messages
+    setIsEditing(false); // Reset to viewing state
+    onClose(); // Close the modal
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+    setError("");
     try {
       const response = await api.put(`/rents/${property._id}`, {
         ...formData,
         rentPrice: parseFloat(formData.rentPrice),
       });
-
-      if (response.data.success) {
-        if (onUpdate) onUpdate(); // refresh table in parent
-        setIsEditing(false);
-        onClose();
-      }
+      onUpdate(response.data); // Update parent component with new data
+      onClose(); // Close the modal after successful update
+      setIsEditing(false); // Reset to viewing state
     } catch (err) {
       setError(
         err.response?.data?.message || "Failed to update property. Try again.",
@@ -64,7 +83,7 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
           </h2>
 
           <button
-            onClick={onClose}
+            onClick={handleCloseModal}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
           >
             ✕
@@ -72,10 +91,7 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
         </div>
 
         {/* Form */}
-        <form
-          className="space-y-5 p-6 overflow-y-auto"
-          onSubmit={isEditing ? handleSave : (e) => e.preventDefault()}
-        >
+        <form className="space-y-5 p-6 overflow-y-auto" onSubmit={handleSave}>
           {error && (
             <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
               {error}
@@ -93,9 +109,7 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
               value={formData.rentTitle}
               onChange={handleInputChange}
               readOnly={!isEditing}
-              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${
-                !isEditing ? "bg-gray-100" : "bg-white"
-              }`}
+              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${isEditing ? "bg-white" : "bg-gray-100"}`}
             />
           </div>
 
@@ -110,9 +124,7 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
               value={formData.rentDescription}
               onChange={handleInputChange}
               readOnly={!isEditing}
-              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all resize-none ${
-                !isEditing ? "bg-gray-100" : "bg-white"
-              }`}
+              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all resize-none ${isEditing ? "bg-white" : "bg-gray-100"}`}
             />
           </div>
 
@@ -126,13 +138,37 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
               value={formData.rentCategory}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all bg-white ${
-                !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-              }`}
+              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${isEditing ? "bg-white" : "bg-gray-100 cursor-not-allowed"}`}
             >
-              {rentCategories.map((category) => (
+              <option value="" disabled>
+                Select Unit Type
+              </option>
+              {rentCategory.map((category) => (
                 <option key={category} value={category}>
                   {category}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Rent Status */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Status
+            </label>
+            <select
+              name="rentStatus"
+              value={formData.rentStatus}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${isEditing ? "bg-white" : "bg-gray-100 cursor-not-allowed"}`}
+            >
+              <option value="" disabled>
+                Select Status
+              </option>
+              {rentStatus.map((status) => (
+                <option key={status} value={status}>
+                  {status}
                 </option>
               ))}
             </select>
@@ -150,9 +186,7 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
                 value={formData.rentPrice}
                 onChange={handleInputChange}
                 readOnly={!isEditing}
-                className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${
-                  !isEditing ? "bg-gray-100" : "bg-white"
-                }`}
+                className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${isEditing ? "bg-white" : "bg-gray-100"}`}
               />
             </div>
 
@@ -166,9 +200,7 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
                 value={formData.rentImageURL}
                 onChange={handleInputChange}
                 readOnly={!isEditing}
-                className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${
-                  !isEditing ? "bg-gray-100" : "bg-white"
-                }`}
+                className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${isEditing ? "bg-white" : "bg-gray-100"}`}
               />
             </div>
           </div>
@@ -184,31 +216,29 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
               value={formData.rentAddress}
               onChange={handleInputChange}
               readOnly={!isEditing}
-              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${
-                !isEditing ? "bg-gray-100" : "bg-white"
-              }`}
+              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all ${isEditing ? "bg-white" : "bg-gray-100"}`}
             />
           </div>
 
           {/* Buttons */}
           <div className="flex items-center justify-end space-x-3 pt-6 border-t">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isLoading}
-              className="px-5 py-2.5 text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-50"
-            >
-              {isEditing ? "Cancel" : "Close"}
-            </button>
-
             {isEditing ? (
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="px-5 py-2.5 text-sm font-bold text-white bg-[#1A1A1A] rounded-lg hover:bg-black transition-all shadow-sm disabled:opacity-50"
-              >
-                {isLoading ? "Saving..." : "Save"}
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="px-5 py-2.5 text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 text-sm font-bold text-white bg-[#1A1A1A] rounded-lg hover:bg-black transition-all shadow-sm"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Saving..." : "Save"}
+                </button>
+              </>
             ) : (
               <button
                 type="button"
