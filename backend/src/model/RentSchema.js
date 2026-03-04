@@ -6,11 +6,12 @@ const rentSchema = new mongoose.Schema(
     rentDescription: { type: String },
     rentAddress: { type: String },
     rentCategory: { type: String },
+    rentStatus: { type: String },
     rentPrice: { type: Number },
     rentImageURL: { type: String },
     userId: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Rent = new mongoose.model("Rent", rentSchema);

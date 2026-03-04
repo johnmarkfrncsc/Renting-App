@@ -17,8 +17,6 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login with :", { email, password });
-
     setLoading(true);
     setError("");
 
@@ -27,18 +25,12 @@ const LoginPage = () => {
         email,
         password,
       });
-
       if (response?.data?.success) {
         const userData = login(
           response.data.token,
           response.data.role,
           response.data.id,
         );
-        console.log("User data stored:", userData);
-
-        // test verify role value
-        console.log("Role value:", userData.role);
-
         if (userData.role === "admin") {
           console.log("Navigating to admin");
           navigate("/admin");
