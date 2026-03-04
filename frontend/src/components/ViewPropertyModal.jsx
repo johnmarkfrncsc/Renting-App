@@ -12,8 +12,8 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
 
   const rentCategory = [
     "house",
-    "unit 1BR",
-    "unit 2BR",
+    "unit 1br",
+    "unit 2br",
     "unit penthouse",
     "room",
     "dorm",
