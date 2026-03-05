@@ -1,36 +1,25 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import AddListingModal from "../components/AddListingModal";
-import PropertyTable from "../components/PropertyTable";
-import { useModal } from "../components/hooks/useModal";
+import { Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import {
   LayoutDashboard,
   Building2,
   Users,
   Menu,
   X,
-  Search,
-  Plus,
-  Download,
-  MoreHorizontal,
   LogOut,
 } from "lucide-react";
 
 const AdminPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isModalOpen, openModal, closeModal } = useModal();
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/login");
-  };
-
-  const handleListingAdded = () => {
-    setRefreshTrigger((prev) => prev + 1);
   };
 
   return (
@@ -62,35 +51,9 @@ const AdminPage = () => {
         </header>
 
         <div className="flex-1 overflow-y-auto p-4 md:p-8">
-          {/* Desktop Title & Actions */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-            <h2 className="hidden md:block text-3xl font-bold text-gray-900">
-              Portfolio
-            </h2>
-            <div className="flex gap-2 w-full md:w-auto">
-              <button className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-                <Download size={16} /> Import
-              </button>
-              <button
-                onClick={openModal}
-                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 cursor-pointer bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-900 transition-colors"
-              >
-                <Plus size={16} /> Add Property
-              </button>
-            </div>
-          </div>
-
-          {/* Table Component */}
-          <PropertyTable refreshTrigger={refreshTrigger} />
+          <Outlet />
         </div>
       </main>
-
-      {/* Add Listing Modal */}
-      <AddListingModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onListingAdded={handleListingAdded}
-      />
     </div>
   );
 };
@@ -116,8 +79,12 @@ const Sidebar = ({ isMenuOpen, onClose, handleLogout }) => (
     </div>
 
     <nav className="px-4 space-y-1 **:text-black **:hover:bg-gray-500 **:hover:text-white">
-      <NavItem icon={<LayoutDashboard size={18} />} label="Overview" />
-      <NavItem icon={<Building2 size={18} />} label="Portfolio" />
+      <Link to="/admin/overview">
+        <NavItem icon={<LayoutDashboard size={18} />} label="Overview" />
+      </Link>
+      <Link to="/admin/portfolio">
+        <NavItem icon={<Building2 size={18} />} label="Portfolio" />
+      </Link>
       <NavItem icon={<Users size={18} />} label="People" />
       <NavItem
         icon={<LogOut size={18} />}
