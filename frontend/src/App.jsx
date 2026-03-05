@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { Route, Routes } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Homepage from "./pages/Homepage.jsx";
 import CreatePage from "./pages/CreatePage.jsx";
 import ListingPage from "./pages/ListingPage.jsx";
@@ -8,6 +8,8 @@ import LoginPage from "./pages/LoginPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import PrivateRoute from "./routes/PrivateRoute.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
+import OverviewPage from "./pages/OverviewPage.jsx";
+import Portfolio from "./pages/PortfolioPage.jsx";
 
 function App() {
   return (
@@ -22,7 +24,11 @@ function App() {
                 <AdminPage />
               </PrivateRoute>
             }
-          />
+          >
+            <Route index element={<Navigate to="/admin/overview" />} />
+            <Route path="overview" element={<OverviewPage />} />
+            <Route path="portfolio" element={<Portfolio />} />
+          </Route>
           <Route
             path="/"
             element={
