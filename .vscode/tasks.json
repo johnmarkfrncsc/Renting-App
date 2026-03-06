@@ -1,0 +1,39 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "frontend: dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "panel": "dedicated",
+        "group": "servers"
+      }
+    },
+    {
+      "label": "backend: start",
+      "type": "shell",
+      "command": "npm run start",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "panel": "dedicated",
+        "group": "servers"
+      }
+    },
+    {
+      "label": "run full stack",
+      "dependsOn": ["frontend: dev", "backend: start"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}
