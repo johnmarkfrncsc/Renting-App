@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Search, MoreHorizontal, Loader, AlertCircle } from "lucide-react";
 import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
