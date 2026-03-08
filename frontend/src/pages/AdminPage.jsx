@@ -47,7 +47,8 @@ const AdminPage = () => {
             <Menu size={24} />
           </button>
           <h2 className="text-lg font-bold">Portfolio</h2>
-          <div className="w-6" /> {/* Spacer for centering */}
+          {/* TODO: Center This Properly!!!! okay?*/}
+          <div className="w-6" /> 
         </header>
 
         <div className="flex-1 overflow-y-auto p-4 md:p-8">
