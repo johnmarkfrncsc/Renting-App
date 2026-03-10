@@ -19,6 +19,9 @@ const OverviewPage = () => {
     totalProperties > 0
       ? Math.round((occupied.length / totalProperties) * 100)
       : 0;
+  const recentProperties = [...properties]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 4);
 
   const fetchOverviewData = async () => {
     setIsLoading(true);
@@ -111,7 +114,7 @@ const OverviewPage = () => {
         </div>
         <div className="w-full bg-gray-100 rounded-full h-3">
           <div
-            className="bg-black h-3 rounded-full transition-all duration-500"
+            className="bg-indigo-600 h-3 rounded-full transition-all duration-500"
             style={{ width: `${occupancyRate}%` }}
           />
         </div>
@@ -121,9 +124,58 @@ const OverviewPage = () => {
         </div>
       </div>
 
+      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
+        <h3 className="text-sm font-semibold text-gray-700 mb-4">
+          Recent Properties
+        </h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-auto">
+            <thead className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-700">
+              <tr className="**:px-4 **:py-4 **uppercase">
+                <th>Property</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {recentProperties.map((property) => (
+                <RecentProperties key={property._id} property={property} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
       <RevenueChart occupied={occupied} />
     </div>
   );
 };
+
+const RecentProperties = ({ property }) => (
+  <tr className="hover:bg-gray-50 transition-colors capitalize">
+    <td className="px-4 py-4">
+      <div className="flex items-center gap-3">
+        {property.rentImageURL ? (
+          <img
+            src={property.rentImageURL}
+            alt={property.rentTitle}
+            className="w-8 h-8 bg-gray-200 rounded shrink-0 object-cover"
+          />
+        ) : (
+          <div className="w-8 h-8 bg-gray-200 rounded shrink-0"></div>
+        )}
+        <div className="flex flex-col min-w-0">
+          <span className="font-semibold text-sm text-gray-900 truncate capitalize">
+            {property.rentTitle}
+          </span>
+          <span className="text-xs text-gray-500 truncate">
+            {property.rentAddress}
+          </span>
+        </div>
+      </div>
+    </td>
+    <td className="px-4 py-4 font-bold text-green-700">
+      ${property.rentPrice.toLocaleString()}
+    </td>
+  </tr>
+);
 
 export default OverviewPage;

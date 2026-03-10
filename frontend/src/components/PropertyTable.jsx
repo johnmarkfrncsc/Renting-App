@@ -219,7 +219,7 @@ const PropertyRow = ({ property, onView, onDelete }) => (
       <span
         className={`font-semibold whitespace-nowrap ${statusColor[property.rentStatus] || "text-red-600 bg-red-700/20 rounded-sm px-3 py-2"}`}
       >
-        ● {property.rentStatus}
+        {property.rentStatus}
       </span>
     </td>
     <td className="px-6 py-4 font-bold text-green-700">
