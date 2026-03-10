@@ -26,7 +26,7 @@ const RevenueChart = ({ occupied }) => {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="revenue" fill="#1A1A1A" barSize={100} />
+          <Bar dataKey="revenue" fill="#4F46E5" barSize={75} />
         </BarChart>
       </ResponsiveContainer>
     </div>
