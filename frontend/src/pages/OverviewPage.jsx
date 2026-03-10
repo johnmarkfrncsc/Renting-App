@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
 import { Building2, CheckCircle, XCircle, DollarSign } from "lucide-react";
+import RevenueChart from "../components/RevenueChart";
 
 const OverviewPage = () => {
   const { user } = useContext(AuthContext);
@@ -119,6 +120,8 @@ const OverviewPage = () => {
           <span>{vacant.length} Vacant</span>
         </div>
       </div>
+
+      <RevenueChart occupied={occupied} />
     </div>
   );
 };

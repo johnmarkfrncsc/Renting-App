@@ -34,6 +34,8 @@ const signup = async (data) => {
       { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }, //token expiry in env
     );
 
+    
+
     return {
       success: true,
       data: {
