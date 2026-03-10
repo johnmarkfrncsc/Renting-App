@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useModal } from "./hooks/useModal";
 import ViewPropertyModal from "./ViewPropertyModal";
 import DeleteConfirmModal from "./DeleteConfirmModal";
+import ActionMenu from "./ActionMenu";
 
 const PropertyTable = ({ refreshTrigger }) => {
   const { user } = useContext(AuthContext);
@@ -77,6 +78,19 @@ const PropertyTable = ({ refreshTrigger }) => {
     }
   }, [searchTerm, properties]);
 
+  //Toggle action menu
+  const [openMenuId, setOpenMenuId] = useState(null);
+
+  const handleMenuToggle = (propertyId) => {
+    setOpenMenuId((prevId) => (prevId === propertyId ? null : propertyId));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = () => setOpenMenuId(null);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <>
       {/* Filter Bar */}
@@ -131,11 +145,11 @@ const PropertyTable = ({ refreshTrigger }) => {
                   <th className="px-6 py-4 uppercase whitespace-nowrap">
                     Tenant Name
                   </th>
-                  <th className="px-6 py-4 uppercase text-right">Action</th>
+                  <th className="px-6 py-4 uppercase text-center">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 text-sm">
-                {filteredProperties.map((property) => (
+                {filteredProperties.map((property, index) => (
                   <PropertyRow
                     key={property._id}
                     property={property}
@@ -147,6 +161,10 @@ const PropertyTable = ({ refreshTrigger }) => {
                       setPropertyToDelete(property);
                       openDeleteModal();
                     }}
+                    openMenuId={openMenuId}
+                    onMenuToggle={() => handleMenuToggle(property._id)}
+                    index={index}
+                    totalCount={filteredProperties.length}
                   />
                 ))}
               </tbody>
@@ -189,63 +207,75 @@ const statusColor = {
   vacant: "text-yellow-600 bg-yellow-700/20 rounded-sm px-3 py-2",
 };
 // Row Component
-const PropertyRow = ({ property, onView, onDelete }) => (
-  <tr className="hover:bg-gray-50 transition-colors capitalize">
-    <td className="px-6 py-4">
-      <div className="flex items-center gap-3">
-        {property.rentImageURL ? (
-          <img
-            src={property.rentImageURL}
-            alt={property.rentTitle}
-            className="w-8 h-8 bg-gray-200 rounded shrink-0 object-cover"
-          />
-        ) : (
-          <div className="w-8 h-8 bg-gray-200 rounded shrink-0"></div>
-        )}
-        <div className="flex flex-col min-w-0">
-          <span className="font-semibold text-sm text-gray-900 truncate capitalize">
-            {property.rentTitle}
-          </span>
-          <span className="text-xs text-gray-500 truncate">
-            {property.rentAddress}
-          </span>
+const PropertyRow = ({
+  property,
+  onView,
+  onDelete,
+  openMenuId,
+  onMenuToggle,
+  index,
+  totalCount,
+}) => {
+  const isLastRow = index === totalCount - 1;
+
+  return (
+    <tr className="hover:bg-gray-50 transition-colors capitalize">
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-3">
+          {property.rentImageURL ? (
+            <img
+              src={property.rentImageURL}
+              alt={property.rentTitle}
+              className="w-8 h-8 bg-gray-200 rounded shrink-0 object-cover"
+            />
+          ) : (
+            <div className="w-8 h-8 bg-gray-200 rounded shrink-0"></div>
+          )}
+          <div className="flex flex-col min-w-0">
+            <span className="font-semibold text-sm text-gray-900 truncate capitalize">
+              {property.rentTitle}
+            </span>
+            <span className="text-xs text-gray-500 truncate">
+              {property.rentAddress}
+            </span>
+          </div>
         </div>
-      </div>
-    </td>
-    <td className="px-6 py-4 text-gray-900 text-sm font-semibold">
-      <span className="truncate block">{property.rentCategory}</span>
-    </td>
-    <td className="px-6 py-4 text-sm">
-      <span
-        className={`font-semibold whitespace-nowrap ${statusColor[property.rentStatus] || "text-red-600 bg-red-700/20 rounded-sm px-3 py-2"}`}
-      >
-        {property.rentStatus}
-      </span>
-    </td>
-    <td className="px-6 py-4 font-bold text-green-700">
-      ${property.rentPrice.toLocaleString()}
-    </td>
-    <td className="px-6 py-4 text-gray-900 text-sm font-semibold">
-      <span className="truncate block">Tenant</span>
-    </td>
-    <td className="px-6 py-4 text-right flex justify-end gap-2">
-      <button
-        className="bg-black text-white px-3 py-1 rounded text-xs cursor-pointer hover:bg-gray-800 transition-colors"
-        onClick={onView}
-      >
-        View
-      </button>
-      <button
-        className="bg-red-500 text-white px-3 py-1 rounded text-xs cursor-pointer hover:bg-gray-800 transition-colors"
-        onClick={onDelete}
-      >
-        Delete
-      </button>
-      <button className="md:hidden p-1 border rounded text-gray-400 hover:bg-gray-50 transition-colors">
-        <MoreHorizontal size={16} />
-      </button>
-    </td>
-  </tr>
-);
+      </td>
+      <td className="px-6 py-4 text-gray-900 text-sm font-semibold">
+        <span className="truncate block">{property.rentCategory}</span>
+      </td>
+      <td className="px-6 py-4 text-sm">
+        <span
+          className={`font-semibold whitespace-nowrap ${statusColor[property.rentStatus] || "text-red-600 bg-red-700/20 rounded-sm px-3 py-2"}`}
+        >
+          {property.rentStatus}
+        </span>
+      </td>
+      <td className="px-6 py-4 font-bold text-green-700">
+        ${property.rentPrice.toLocaleString()}
+      </td>
+      <td className="px-6 py-4 text-gray-900 text-sm font-semibold">
+        <span className="truncate block">Tenant</span>
+      </td>
+      <td className="px-6 py-4 text-right relative flex justify-center">
+        <button
+          className="cursor-pointer p-1  hover:bg-gray-50 transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            onMenuToggle();
+          }}
+        >
+          <MoreHorizontal size={16} />
+        </button>
+        <ActionMenu
+          isLastRow={isLastRow}
+          isOpen={openMenuId === property._id}
+          onView={onView}
+          onDelete={onDelete}
+        />
+      </td>
+    </tr>
+  );
+};
 
 export default PropertyTable;

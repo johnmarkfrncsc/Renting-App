@@ -50,7 +50,7 @@ const AdminPage = () => {
           <h2 className="text-lg font-bold flex-1 text-center">Portfolio</h2>
         </header>
 
-        <div className="flex-1 overflow-y-auto md:p-3 lg:pt-3 ">
+        <div className="flex-1 overflow-y-auto p-5 md:p-3 lg:pt-3 ">
           <Outlet />
         </div>
       </main>
