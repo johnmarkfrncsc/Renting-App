@@ -68,6 +68,34 @@ const ValidateRent = (req, res, next) => {
             message: `${fieldName} can't have empty string`,
           });
         }
+        if (fieldName === "rentTitle") {
+          // Reject if title is numbers only
+          if (/^\d+$/.test(trimmedValue)) {
+            return res.status(400).json({
+              message: `Title cannot be numbers only. Please provide a descriptive title.`,
+            });
+          }
+
+          // Reject if title has no letters at all (e.g. "123 !!! 456")
+          if (!/[a-zA-Z]/.test(trimmedValue)) {
+            return res.status(400).json({
+              message: `Title must contain letters.`,
+            });
+          }
+          // ✅ Catches "aaaaaaaaaa" - entire string is one repeated character
+          if (/^(.)\1+$/.test(trimmedValue)) {
+            return res.status(400).json({
+              message: "Title cannot consist of a single repeated character.",
+            });
+          }
+
+          // ✅ Catches "ababababab", "abcabcabc" - repeating patterns
+          if (/^(.{1,3})\1{2,}$/.test(trimmedValue)) {
+            return res.status(400).json({
+              message: "Title cannot consist of repeating patterns.",
+            });
+          }
+        }
 
         //Validate string length
         if (lengthRules) {
