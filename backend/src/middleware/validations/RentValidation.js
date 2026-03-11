@@ -82,14 +82,13 @@ const ValidateRent = (req, res, next) => {
               message: `Title must contain letters.`,
             });
           }
-          // ✅ Catches "aaaaaaaaaa" - entire string is one repeated character
+          // Rejects "aaaaaaaaaa" - entire string is one repeated character
           if (/^(.)\1+$/.test(trimmedValue)) {
             return res.status(400).json({
               message: "Title cannot consist of a single repeated character.",
             });
           }
-
-          // ✅ Catches "ababababab", "abcabcabc" - repeating patterns
+          // Rejects "ababababab", "abcabcabc" - repeating patterns
           if (/^(.{1,3})\1{2,}$/.test(trimmedValue)) {
             return res.status(400).json({
               message: "Title cannot consist of repeating patterns.",

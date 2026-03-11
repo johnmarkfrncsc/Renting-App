@@ -1,0 +1,235 @@
+import { useState } from "react";
+import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
+
+const AddListingPage = () => {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    rentTitle: "",
+    rentDescription: "",
+    rentCategory: "",
+    rentStatus: "",
+    rentPrice: "",
+    rentAddress: "",
+    rentImageURL: "",
+  });
+
+  const rentCategories = [
+    "house",
+    "unit 1br",
+    "unit 2br",
+    "unit Penthouse",
+    "room",
+    "dorm",
+  ];
+
+  const rentStatusOptions = ["occupied", "vacant", "under renovation"];
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setError("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !formData.rentTitle ||
+      !formData.rentDescription ||
+      !formData.rentCategory ||
+      !formData.rentStatus ||
+      !formData.rentPrice ||
+      !formData.rentAddress
+    ) {
+      setError("Please fill in all required fields");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await api.post("/rents", {
+        ...formData,
+        rentPrice: parseFloat(formData.rentPrice),
+      });
+
+      if (response.data.success || response.status === 201) {
+        navigate("/admin/portfolio");
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "Failed to create listing. Please try again.",
+      );
+      console.error("Error creating listing:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const inputClass =
+    "w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm bg-white";
+
+  const labelClass = "block text-sm font-semibold text-gray-700 mb-1.5";
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Page Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-900">
+          <button
+            onClick={() => navigate("/admin/portfolio")}
+            className="font-bold text-gray-500 hover:text-gray-800 transition-colors"
+          >
+            Portfolio
+          </button>
+          <ChevronRight size={30} className="text-gray-400" />
+          <span className="font-bold text-gray-900">Add Property</span>
+        </h2>
+      </div>
+
+      {/* Form Card */}
+      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 flex flex-col gap-6">
+        {/* Section Title */}
+        <h3 className="text-base font-bold text-gray-900 border-b border-gray-100 pb-4">
+          About Property
+        </h3>
+
+        {error && (
+          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {/* Row 1: Title + Category */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <label className={labelClass}>
+                Property Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="rentTitle"
+                placeholder="e.g. Modern Studio at Blue Sky Towers"
+                value={formData.rentTitle}
+                onChange={handleInputChange}
+                className={inputClass}
+              />
+            </div>
+            <div className="flex-1">
+              <label className={labelClass}>
+                Property Category <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="rentCategory"
+                value={formData.rentCategory}
+                onChange={handleInputChange}
+                className={inputClass}
+              >
+                <option value="">Select category</option>
+                {rentCategories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Row 2: Price + Status */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <label className={labelClass}>
+                Price (Monthly) <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                name="rentPrice"
+                placeholder="2,000 to 30,000"
+                value={formData.rentPrice}
+                onChange={handleInputChange}
+                className={inputClass}
+              />
+            </div>
+            <div className="flex-1">
+              <label className={labelClass}>
+                Status <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="rentStatus"
+                value={formData.rentStatus}
+                onChange={handleInputChange}
+                className={inputClass}
+              >
+                <option value="">Select status</option>
+                {rentStatusOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Row 3: Address - full width */}
+          <div>
+            <label className={labelClass}>
+              Property Address <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="rentAddress"
+              placeholder="Street, City, Zip, Country"
+              value={formData.rentAddress}
+              onChange={handleInputChange}
+              className={inputClass}
+            />
+          </div>
+
+          {/* Row 4: Description - full width */}
+          <div>
+            <label className={labelClass}>
+              Description <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              rows="4"
+              name="rentDescription"
+              placeholder="Tell us about the property..."
+              value={formData.rentDescription}
+              onChange={handleInputChange}
+              className={`${inputClass} resize-none`}
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={() => navigate("/admin/portfolio")}
+              disabled={isLoading}
+              className="px-5 py-2.5 text-sm font-semibold text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-500 transition-colors disabled:opacity-50"
+            >
+              {isLoading ? "Creating..." : "Save Property"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default AddListingPage;
