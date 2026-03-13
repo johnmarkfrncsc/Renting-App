@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, CloudUpload, X } from "lucide-react";
 
 const AddListingPage = () => {
   const navigate = useNavigate();
@@ -27,8 +27,34 @@ const AddListingPage = () => {
 
   const rentStatusOptions = ["occupied", "vacant", "under renovation"];
 
+  const fileInputRef = useRef();
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const uploadImageToCloudinary = async () => {
+    const cloudinaryData = new FormData();
+    cloudinaryData.append("file", imageFile);
+    cloudinaryData.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
+    );
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/upload`,
+        {
+          method: "POST",
+          body: cloudinaryData,
+        },
+      );
+      const data = await response.json();
+      return data.secure_url; // Return the uploaded image URL
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -53,24 +79,53 @@ const AddListingPage = () => {
 
     setIsLoading(true);
 
-    try {
-      const response = await api.post("/rents", {
-        ...formData,
-        rentPrice: parseFloat(formData.rentPrice),
-      });
+    if (imageFile) {
+      const storedImageUrl = await uploadImageToCloudinary();
 
-      if (response.data.success || response.status === 201) {
-        navigate("/admin/portfolio");
+      if (!storedImageUrl) {
+        setError("Image upload failed. Please try again");
+        setIsLoading(false);
+        return;
       }
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "Failed to create listing. Please try again.",
-      );
-      console.error("Error creating listing:", err);
-    } finally {
-      setIsLoading(false);
+      try {
+        const response = await api.post("/rents", {
+          ...formData,
+          rentPrice: parseFloat(formData.rentPrice),
+          rentImageURL: storedImageUrl,
+        });
+
+        if (response.data.success || response.status === 201) {
+          navigate("/admin/portfolio");
+        }
+      } catch (err) {
+        setError(
+          err.response?.data?.message ||
+            "Failed to create listing. Please try again.",
+        );
+        console.error("Error creating listing:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setError("Please upload an image for the property.");
     }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.match("image.*")) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImageFile(null);
+      setImagePreview(null);
+      setError("Please select a valid image file");
+    }
+  };
+
+  const handleImageRemove = () => {
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   const inputClass =
@@ -206,6 +261,48 @@ const AddListingPage = () => {
               onChange={handleInputChange}
               className={`${inputClass} resize-none`}
             />
+            <label className={labelClass}>Upload Image</label>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              className="hidden"
+            />
+            <div
+              onClick={() => fileInputRef.current.click()}
+              className="border-2 border-dashed border-gray-200 rounded-lg h-48 flex flex-col items-center justify-center cursor-pointer object-cover "
+            >
+              {imagePreview ? (
+                <div className="relative w-full h-48">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleImageRemove();
+                    }}
+                    className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-500 transition-colors"
+                  >
+                    <span className="sr-only">Remove Image</span>
+                    <X size={14} />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <CloudUpload />
+                  <p>
+                    Drag & Drop here Or{" "}
+                    <span className="text-indigo-600 font-semibold">
+                      Click to browse
+                    </span>
+                  </p>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Buttons */}
@@ -223,7 +320,7 @@ const AddListingPage = () => {
               disabled={isLoading}
               className="px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-500 transition-colors disabled:opacity-50"
             >
-              {isLoading ? "Creating..." : "Save Property"}
+              {isLoading ? "Creating please wait..." : "Save Property"}
             </button>
           </div>
         </form>
