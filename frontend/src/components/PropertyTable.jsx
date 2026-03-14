@@ -10,11 +10,14 @@ import ActionMenu from "./ActionMenu";
 const PropertyTable = ({ refreshTrigger }) => {
   const { user } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [properties, setProperties] = useState([]);
   const [propertyToDelete, setPropertyToDelete] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
 
   // Modal state
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -76,20 +79,33 @@ const PropertyTable = ({ refreshTrigger }) => {
       );
       setFilteredProperties(filtered);
     }
-  }, [searchTerm, properties]);
+
+    if (statusFilter) {
+      setFilteredProperties((prev) =>
+        prev.filter(
+          (property) =>
+            property.rentStatus.toLowerCase() === statusFilter.toLowerCase(),
+        ),
+      );
+    }
+  }, [searchTerm, properties, statusFilter]);
 
   //Toggle action menu
-  const [openMenuId, setOpenMenuId] = useState(null);
 
   const handleMenuToggle = (propertyId) => {
     setOpenMenuId((prevId) => (prevId === propertyId ? null : propertyId));
   };
 
   useEffect(() => {
-    const handleClickOutside = () => setOpenMenuId(null);
+    const handleClickOutside = () => {
+      setOpenMenuId(null);
+      setIsExpanded(false);
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const filteredLabel = statusFilter === "" ? "All Status" : statusFilter;
 
   return (
     <>
@@ -104,6 +120,37 @@ const PropertyTable = ({ refreshTrigger }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
           />
+        </div>
+        {/* Status Filter */}
+        <div onMouseDown={(e) => e.stopPropagation()}>
+          {isExpanded ? (
+            <div className="flex gap-2">
+              {["", "occupied", "vacant", "under renovation"].map((status) => (
+                <button
+                  key={status}
+                  onClick={() => {
+                    setStatusFilter(status);
+                    setIsExpanded(false);
+                  }}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+                    statusFilter === status
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "text-gray-500 border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  {status === "" ? "All" : status}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <button
+              className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors cursor-pointer 
+                ${statusFilter ? "bg-indigo-600 text-white" : `${statusFilter}`} `}
+              onClick={() => setIsExpanded(true)}
+            >
+              {filteredLabel}
+            </button>
+          )}
         </div>
       </div>
 
