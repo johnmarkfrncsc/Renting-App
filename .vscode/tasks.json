@@ -34,6 +34,19 @@
       "dependsOn": ["frontend: dev", "backend: start"],
       "dependsOrder": "parallel",
       "problemMatcher": []
+    },
+    {
+      "label": "frontend: deploy",
+      "type": "shell",
+      "command": "npm run build && cp -r dist/* /var/www/rentara",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "group": "deploy"
+      }
     }
   ]
 }

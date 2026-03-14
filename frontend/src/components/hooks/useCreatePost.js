@@ -31,7 +31,7 @@ export function useCreatePost() {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/rents`,
+        `/api/rents`,
         formData
       );
       setSuccess(true);

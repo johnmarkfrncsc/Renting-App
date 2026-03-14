@@ -124,7 +124,7 @@ const PropertyTable = ({ refreshTrigger }) => {
         {/* Status Filter */}
         <div onMouseDown={(e) => e.stopPropagation()}>
           {isExpanded ? (
-            <div className="flex gap-2">
+            <div className="flex gap-2 overflow-x-auto pb-0.5 whitespace-nowrap">
               {["", "occupied", "vacant", "under renovation"].map((status) => (
                 <button
                   key={status}
@@ -250,8 +250,8 @@ const PropertyTable = ({ refreshTrigger }) => {
 };
 
 const statusColor = {
-  occupied: "text-green-600 bg-green-700/20 rounded-sm px-3 py-2",
-  vacant: "text-yellow-600 bg-yellow-700/20 rounded-sm px-3 py-2",
+  occupied: "text-green-600 bg-green-700/20 rounded-full px-3 py-2",
+  vacant: "text-yellow-600 bg-yellow-700/20 rounded-full px-3 py-2",
 };
 // Row Component
 const PropertyRow = ({
@@ -293,7 +293,8 @@ const PropertyRow = ({
       </td>
       <td className="px-6 py-4 text-sm">
         <span
-          className={`font-semibold whitespace-nowrap ${statusColor[property.rentStatus] || "text-red-600 bg-red-700/20 rounded-sm px-3 py-2"}`}
+          className={`font-semibold whitespace-nowrap 
+          ${statusColor[property.rentStatus] || "text-red-900 bg-red-700/20 rounded-full px-3 py-2"}`}
         >
           {property.rentStatus}
         </span>
