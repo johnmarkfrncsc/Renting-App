@@ -11,7 +11,7 @@ const FeaturedSection = () => {
 
   const fetchRents = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/rents");
+      const response = await axios.get("/api/rents");
       const rents = response.data?.data;
       setData(Array.isArray(rents) ? rents : []);
     } catch (error) {
