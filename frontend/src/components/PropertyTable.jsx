@@ -294,7 +294,7 @@ const PropertyRow = ({
       <td className="px-6 py-4 text-sm">
         <span
           className={`font-semibold whitespace-nowrap 
-          ${statusColor[property.rentStatus] || "text-red-900 bg-red-700/20 rounded-full px-3 py-2"}`}
+          ${statusColor[property.rentStatus] || "text-red-600 bg-red-700/20 rounded-full px-3 py-2"}`}
         >
           {property.rentStatus}
         </span>
