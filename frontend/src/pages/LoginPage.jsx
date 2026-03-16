@@ -59,8 +59,8 @@ const LoginPage = () => {
         )}
         <form className="space-y-4" onSubmit={handleLogin}>
           <div>
-            <label htmlFor="email" className="block text-sm text-gray-600 mb-1">
-              Email or mobile phone number
+            <label htmlFor="email" className="block text-sm text-gray-600 mb-1 font-semibold">
+             Email
             </label>
             <input
               id="email"
@@ -74,8 +74,8 @@ const LoginPage = () => {
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label htmlFor="password" className="block text-sm text-gray-600">
-                Your password
+              <label htmlFor="password" className="block text-sm text-gray-600 font-semibold">
+                Password
               </label>
               <button
                 type="button"
@@ -102,41 +102,33 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-full text-sm font-semibold text-white bg-indigo-400 hover:bg-indigo-500 transition-colors disabled:opacity-50 mt-2"
+            className="w-full py-2.5 rounded-full text-sm font-semibold text-white bg-indigo-500 hover:bg-indigo-600 transition-colors disabled:opacity-50 mt-2 hover:cursor-pointer"
           >
+            
             {loading ? "Logging in..." : "Log in"}
           </button>
         </form>
 
-        <p className="text-xs text-gray-500 text-center mt-4">
-          By continuing, you agree to the{" "}
-          <a href="#" className="underline hover:text-gray-700">
-            Terms of use
-          </a>{" "}
-          and{" "}
-          <a href="#" className="underline hover:text-gray-700">
-            Privacy Policy.
-          </a>
-        </p>
-        <div className="flex justify-end mt-4">
-          <a
-            href="#"
-            className="text-sm text-gray-600 underline hover:text-gray-900"
+        <div className="flex justify-center gap-2 mt-4">
+          <p
+            className="text-sm text-gray-600 hover:text-gray-900"
           >
             Forget your password?
-          </a>
+          </p>
+          <a href="" className="text-sm text-indigo-500">Reset Password</a>
         </div>
       </div>
 
       <div className="flex items-center w-full max-w-sm my-5 gap-3">
         <div className="flex-1 h-px bg-gray-300" />
-        <span className="text-sm text-gray-500">New to our community</span>
+        <span className="text-sm text-gray-500">Or</span>
         <div className="flex-1 h-px bg-gray-300" />
       </div>
 
       <Link
         to="/signup"
-        className="w-full max-w-sm py-2.5 rounded-full border border-gray-300 text-sm font-semibold text-gray-800 text-center bg-white hover:bg-gray-50 transition-colors block"
+        className="w-full max-w-sm py-2.5 rounded-full border border-gray-300 text-sm font-semibold text-gray-800 text-center bg-white 
+        hover:bg-gray-50 hover:text-indigo-500 hover:border-indigo-600 transition-colors block"
       >
         Create an account
       </Link>
