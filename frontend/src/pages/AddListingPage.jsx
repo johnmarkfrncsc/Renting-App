@@ -137,7 +137,7 @@ const AddListingPage = () => {
     <div className="flex flex-col h-full">
       {/* Page Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="flex items-center gap-2 text-3xl font-bold text-gray-900">
+        <h2 className="flex items-center gap-1 text-2xl md:text-3xl font-bold text-gray-900">
           <button
             onClick={() => navigate("/admin/portfolio")}
             className="font-bold text-gray-500 hover:text-gray-800 transition-colors"
@@ -145,7 +145,9 @@ const AddListingPage = () => {
             Portfolio
           </button>
           <ChevronRight size={30} className="text-gray-400" />
-          <span className="font-bold text-gray-900">Add Property</span>
+          <span className="font-bold text-gray-900 whitespace-nowrap">
+            Add Property
+          </span>
         </h2>
       </div>
 

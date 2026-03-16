@@ -85,17 +85,22 @@ const OverviewPage = () => {
       <h2 className="text-3xl font-bold text-gray-900 mb-6">Overview</h2>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex items-center gap-4"
+            className="relative bg-white border border-gray-200 rounded-2xl p-2 flex items-center gap-4 justify-center"
           >
-            <div className={`p-3 rounded-lg ${stat.iconBg} ${stat.iconColor}`}>
+            <div
+              className={`absolute -bottom-4 -left-2 shrink-0 w-12 h-12 rounded-full flex items-center justify-center 
+                ${stat.iconBg} ${stat.iconColor}`}
+            >
               {stat.icon}
             </div>
-            <div>
-              <p className="text-sm text-gray-500 font-medium">{stat.label}</p>
+            <div className="text-center">
+              <p className="text-xs text-gray-500 font-medium mb-1">
+                {stat.label}
+              </p>
               <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
             </div>
           </div>

@@ -65,7 +65,7 @@ const Sidebar = ({ isMenuOpen, onClose, handleLogout }) => {
   return (
     <aside
       className={`
-      fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out
+      fixed flex flex-col inset-y-0 left-0 z-50 w-55 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out
       md:relative md:translate-x-0 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
     `}
     >
@@ -81,27 +81,31 @@ const Sidebar = ({ isMenuOpen, onClose, handleLogout }) => {
         </button>
       </div>
 
-      <nav className="px-4 space-y-1 **:mb-0.5  **:hover:bg-indigo-500 **:hover:text-white">
-        <Link to="/admin/overview">
+      <nav className="px-4 space-y-1 flex-1 flex flex-col **:mb-0.5 **:hover:cursor-pointer">
+        <div className="space-y-1 **:hover:bg-indigo-400 **:hover:text-white">
+          <Link to="/admin/overview">
+            <NavItem
+              icon={<LayoutDashboard size={18} />}
+              label="Overview"
+              active={isActive("/admin/overview")}
+            />
+          </Link>
+          <Link to="/admin/portfolio">
+            <NavItem
+              icon={<Building2 size={18} />}
+              label="Portfolio"
+              active={isActive("/admin/portfolio")}
+            />
+          </Link>
+          <NavItem icon={<Users size={18} />} label="People" />
+        </div>
+        <div className="mt-auto pb-4 **:hover:bg-indigo-500 **:hover:text-white">
           <NavItem
-            icon={<LayoutDashboard size={18} />}
-            label="Overview"
-            active={isActive("/admin/overview")}
+            icon={<LogOut size={18} />}
+            label="Log out"
+            onClick={handleLogout}
           />
-        </Link>
-        <Link to="/admin/portfolio">
-          <NavItem
-            icon={<Building2 size={18} />}
-            label="Portfolio"
-            active={isActive("/admin/portfolio")}
-          />
-        </Link>
-        <NavItem icon={<Users size={18} />} label="People" />
-        <NavItem
-          icon={<LogOut size={18} />}
-          label="Log out"
-          onClick={handleLogout}
-        />
+        </div>
       </nav>
     </aside>
   );
