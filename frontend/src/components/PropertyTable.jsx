@@ -250,8 +250,8 @@ const PropertyTable = ({ refreshTrigger }) => {
 };
 
 const statusColor = {
-  occupied: "text-green-600 bg-green-700/20 rounded-full px-3 py-2",
-  vacant: "text-yellow-600 bg-yellow-700/20 rounded-full px-3 py-2",
+  occupied: "text-green-600 bg-green-700/20 rounded-full px-2 py-1",
+  vacant: "text-yellow-600 bg-yellow-700/20 rounded-full px-2 py-1",
 };
 // Row Component
 const PropertyRow = ({
@@ -294,7 +294,7 @@ const PropertyRow = ({
       <td className="px-6 py-4 text-sm">
         <span
           className={`font-semibold whitespace-nowrap 
-          ${statusColor[property.rentStatus] || "text-red-600 bg-red-700/20 rounded-full px-3 py-2"}`}
+          ${statusColor[property.rentStatus] || "text-red-600 bg-red-700/20 rounded-full px-2 py-1"}`}
         >
           {property.rentStatus}
         </span>
