@@ -253,6 +253,7 @@ const statusColor = {
   occupied: "text-green-600 bg-green-700/20 rounded-full px-2 py-1",
   vacant: "text-yellow-600 bg-yellow-700/20 rounded-full px-2 py-1",
 };
+const noTenantStyle = "text-gray-500 italic";
 // Row Component
 const PropertyRow = ({
   property,
@@ -303,7 +304,11 @@ const PropertyRow = ({
         ${property.rentPrice.toLocaleString()}
       </td>
       <td className="px-6 py-4 text-gray-900 text-sm font-semibold">
-        <span className="truncate block">Tenant</span>
+        <span
+          className={`truncate block ${property.rentTenant === "No Tenant" ? noTenantStyle : ""}`}
+        >
+          {property.rentTenant}
+        </span>
       </td>
       <td className="px-6 py-4 text-right relative flex justify-center">
         <button

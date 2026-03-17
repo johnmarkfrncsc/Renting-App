@@ -11,6 +11,7 @@ const AddListingPage = () => {
     rentDescription: "",
     rentCategory: "",
     rentStatus: "",
+    rentTenant: "",
     rentPrice: "",
     rentAddress: "",
     rentImageURL: "",
@@ -20,7 +21,7 @@ const AddListingPage = () => {
     "house",
     "unit 1br",
     "unit 2br",
-    "unit Penthouse",
+    "unit penthouse",
     "room",
     "dorm",
   ];
@@ -236,18 +237,31 @@ const AddListingPage = () => {
           </div>
 
           {/* Row 3: Address - full width */}
-          <div>
-            <label className={labelClass}>
-              Property Address <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="rentAddress"
-              placeholder="Street, City, Zip, Country"
-              value={formData.rentAddress}
-              onChange={handleInputChange}
-              className={inputClass}
-            />
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <label className={labelClass}>Tenant Name</label>
+              <input
+                type="text"
+                name="rentTenant"
+                placeholder="e.g. Juan dela Cruz"
+                value={formData.rentTenant}
+                onChange={handleInputChange}
+                className={inputClass}
+              />
+            </div>
+            <div className="flex-1">
+              <label className={labelClass}>
+                Property Address <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="rentAddress"
+                placeholder="Street, City, Zip, Country"
+                value={formData.rentAddress}
+                onChange={handleInputChange}
+                className={inputClass}
+              />
+            </div>
           </div>
 
           {/* Row 4: Description - full width */}

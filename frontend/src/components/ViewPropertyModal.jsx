@@ -174,6 +174,21 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
             </select>
           </div>
 
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Tenant Name
+            </label>
+            <input
+              type="text"
+              name="rentTenant"
+              value={formData.rentTenant || ""}
+              onChange={handleInputChange}
+              readOnly={!isEditing}
+              className={`w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/5 
+                focus:border-black transition-all ${isEditing ? "bg-white" : "bg-gray-100"}`}
+            />
+          </div>
+
           {/* Price & Image URL */}
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
