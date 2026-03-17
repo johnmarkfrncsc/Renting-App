@@ -51,7 +51,14 @@ const getApiRentById = async (id) => {
 
 const postApiRent = async (data) => {
   try {
-    const rent = new rentSchema(data);
+    const rentData = {
+      ...data,
+      rentTenant:
+        typeof data.rentTenant === "string" && data.rentTenant.trim() !== ""
+          ? data.rentTenant.trim()
+          : "No Tenant",
+    };
+    const rent = new rentSchema(rentData);
     const saved = await rent.save();
     return {
       success: true,
@@ -67,7 +74,9 @@ const postApiRent = async (data) => {
 
 const putApiRent = async (id, data) => {
   try {
-    const updated = await rentSchema.findByIdAndUpdate(id, data, { new: true });
+    const updated = await rentSchema.findByIdAndUpdate(id, data, {
+      new: true,
+    });
 
     if (!updated) {
       return {

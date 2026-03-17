@@ -53,7 +53,7 @@ const OverviewPage = () => {
       label: "Total Properties",
       value: totalProperties,
       icon: <Building2 size={20} />,
-      iconBg: "bg-gray-100",
+      iconBg: "bg-gray-200",
       iconColor: "text-gray-600",
     },
     {
@@ -85,11 +85,11 @@ const OverviewPage = () => {
       <h2 className="text-3xl font-bold text-gray-900 mb-6">Overview</h2>
 
       {/* Stats Cards */}
-      <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+      <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8 ">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="relative bg-white border border-gray-200 rounded-2xl p-2 flex items-center gap-4 justify-center"
+            className="relative bg-white border border-gray-200 rounded-2xl p-2 items-center gap-4 justify-center w-auto"
           >
             <div
               className={`absolute -bottom-4 -left-2 shrink-0 w-12 h-12 rounded-full flex items-center justify-center 
@@ -108,7 +108,7 @@ const OverviewPage = () => {
       </div>
 
       {/* Occupancy Rate */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
+      <div className=" border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-semibold text-gray-700">
             Occupancy Rate

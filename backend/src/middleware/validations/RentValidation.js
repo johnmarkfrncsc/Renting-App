@@ -6,6 +6,7 @@ const ValidateRent = (req, res, next) => {
       "rentAddress",
       "rentCategory",
       "rentStatus",
+      "rentTenant",
       "rentPrice",
       "rentImageURL",
     ];
@@ -14,6 +15,7 @@ const ValidateRent = (req, res, next) => {
       rentDescription: String,
       rentCategory: String,
       rentStatus: String,
+      rentTenant: String,
       rentAddress: String,
       rentImageURL: String,
       rentPrice: Number,
@@ -36,7 +38,7 @@ const ValidateRent = (req, res, next) => {
       "dorm",
     ];
 
-    const validStatus = ["Occupied", "Vacant", "Under Renovation"];
+    const validStatus = ["occupied", "vacant", "under renovation"];
     //4th try
     for (let i = 0; i < fieldRequired.length; i++) {
       // store to looped requiredFields in 'fields'
@@ -117,7 +119,19 @@ const ValidateRent = (req, res, next) => {
           }
         }
 
-        req.body[fieldName] = trimmedValue.toLowerCase();
+        //Validation for allowed status list
+        if (fieldName === "rentStatus") {
+          const statusLower = trimmedValue.toLowerCase();
+          const validStatusLower = validStatus.map((s) => s.toLowerCase());
+          if (!validStatusLower.includes(statusLower)) {
+            return res.status(400).json({
+              message: `${trimmedValue} is not a valid status. Valid statuses are: ${validStatus.join(", ")} `,
+            });
+          }
+          req.body[fieldName] = statusLower;
+        } else {
+          req.body[fieldName] = trimmedValue.toLowerCase();
+        }
       }
       //Validate Type number
       else if (expectedType === Number) {

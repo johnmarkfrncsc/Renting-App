@@ -9,6 +9,7 @@ const rentSchema = new mongoose.Schema(
     rentStatus: { type: String },
     rentPrice: { type: Number },
     rentImageURL: { type: String },
+    rentTenant: { type: String, default: "No Tenant", required: false },
     userId: { type: String, required: true },
   },
   { timestamps: true },

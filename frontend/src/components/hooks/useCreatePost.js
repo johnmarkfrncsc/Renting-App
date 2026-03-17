@@ -30,10 +30,7 @@ export function useCreatePost() {
     setSuccess(false);
 
     try {
-      const response = await axios.post(
-        `/api/rents`,
-        formData
-      );
+      const response = await axios.post(`/api/rents`, formData);
       setSuccess(true);
       setFormData(response);
       console.log("Successfully created a new list:", response.data);
