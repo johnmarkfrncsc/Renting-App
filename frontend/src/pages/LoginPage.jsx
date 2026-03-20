@@ -45,9 +45,8 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4">
-      
       <div className="w-16 h-16 rounded-full bg-gray-300 mb-4" />
-      
+
       <div className="bg-white w-full max-w-sm rounded-2xl border border-gray-200 shadow-sm px-8 py-8">
         <h2 className="text-2xl font-semibold text-gray-900 text-center mb-6">
           Sign in
@@ -59,8 +58,11 @@ const LoginPage = () => {
         )}
         <form className="space-y-4" onSubmit={handleLogin}>
           <div>
-            <label htmlFor="email" className="block text-sm text-gray-600 mb-1 font-semibold">
-             Email
+            <label
+              htmlFor="email"
+              className="block text-sm text-gray-600 mb-1 font-semibold"
+            >
+              Email
             </label>
             <input
               id="email"
@@ -74,7 +76,10 @@ const LoginPage = () => {
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label htmlFor="password" className="block text-sm text-gray-600 font-semibold">
+              <label
+                htmlFor="password"
+                className="block text-sm text-gray-600 font-semibold"
+              >
                 Password
               </label>
               <button
@@ -104,18 +109,17 @@ const LoginPage = () => {
             disabled={loading}
             className="w-full py-2.5 rounded-full text-sm font-semibold text-white bg-indigo-500 hover:bg-indigo-600 transition-colors disabled:opacity-50 mt-2 hover:cursor-pointer"
           >
-            
             {loading ? "Logging in..." : "Log in"}
           </button>
         </form>
 
-        <div className="flex justify-center gap-2 mt-4">
-          <p
-            className="text-sm text-gray-600 hover:text-gray-900"
-          >
+        <div className="flex justify-center gap-2 mt-4  **:whitespace-nowrap">
+          <p className="text-sm text-gray-600 hover:text-gray-900">
             Forget your password?
           </p>
-          <a href="" className="text-sm text-indigo-500">Reset Password</a>
+          <a href="" className="text-sm text-indigo-500">
+            Reset Password
+          </a>
         </div>
       </div>
 
@@ -137,14 +141,25 @@ const LoginPage = () => {
         className="w-full max-w-sm mt-3 py-2.5 rounded-full border border-gray-300 text-sm font-semibold text-gray-800 bg-white hover:bg-gray-50 transition-colors flex items-center justify-center gap-3"
       >
         <svg width="18" height="18" viewBox="0 0 48 48">
-          <path fill="#EA4335" d="M24 9.5c3.14 0 5.95 1.08 8.17 2.86l6.1-6.1C34.46 3.05 29.5 1 24 1 14.82 1 7.07 6.48 3.64 14.22l7.1 5.52C12.4 13.67 17.73 9.5 24 9.5z"/>
-          <path fill="#4285F4" d="M46.52 24.5c0-1.64-.15-3.22-.42-4.74H24v9.01h12.68c-.55 2.94-2.2 5.43-4.67 7.1l7.18 5.58C43.35 37.26 46.52 31.35 46.52 24.5z"/>
-          <path fill="#FBBC05" d="M10.74 28.26A14.5 14.5 0 0 1 9.5 24c0-1.48.25-2.91.74-4.26l-7.1-5.52A23.93 23.93 0 0 0 0 24c0 3.86.92 7.5 2.54 10.72l8.2-6.46z"/>
-          <path fill="#34A853" d="M24 47c5.5 0 10.12-1.82 13.5-4.94l-7.18-5.58c-1.82 1.22-4.15 1.94-6.32 1.94-6.27 0-11.6-4.17-13.26-9.76l-8.2 6.46C7.07 41.52 14.82 47 24 47z"/>
+          <path
+            fill="#EA4335"
+            d="M24 9.5c3.14 0 5.95 1.08 8.17 2.86l6.1-6.1C34.46 3.05 29.5 1 24 1 14.82 1 7.07 6.48 3.64 14.22l7.1 5.52C12.4 13.67 17.73 9.5 24 9.5z"
+          />
+          <path
+            fill="#4285F4"
+            d="M46.52 24.5c0-1.64-.15-3.22-.42-4.74H24v9.01h12.68c-.55 2.94-2.2 5.43-4.67 7.1l7.18 5.58C43.35 37.26 46.52 31.35 46.52 24.5z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M10.74 28.26A14.5 14.5 0 0 1 9.5 24c0-1.48.25-2.91.74-4.26l-7.1-5.52A23.93 23.93 0 0 0 0 24c0 3.86.92 7.5 2.54 10.72l8.2-6.46z"
+          />
+          <path
+            fill="#34A853"
+            d="M24 47c5.5 0 10.12-1.82 13.5-4.94l-7.18-5.58c-1.82 1.22-4.15 1.94-6.32 1.94-6.27 0-11.6-4.17-13.26-9.76l-8.2 6.46C7.07 41.52 14.82 47 24 47z"
+          />
         </svg>
         Sign in with Google
       </button>
-
     </div>
   );
 };
