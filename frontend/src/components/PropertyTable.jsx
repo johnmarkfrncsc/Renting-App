@@ -312,7 +312,7 @@ const PropertyRow = ({
       </td>
       <td className="px-6 py-4 text-right relative flex justify-center">
         <button
-          className="cursor-pointer p-1  hover:bg-gray-50 transition-colors"
+          className="cursor-pointer pt-2  hover:bg-gray-50 transition-colors"
           onClick={(e) => {
             e.stopPropagation();
             onMenuToggle();
