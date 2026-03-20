@@ -102,7 +102,7 @@ const SignUpPage = () => {
       </div>
 
       <div className="mb-8 sm:mx-auto sm:w-full sm:max-w-xl">
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center px-4 sm:px-0">
           <div className="flex flex-col items-center gap-1">
             <div
               className={`size-6 rounded-full text-center text-white 
@@ -111,7 +111,7 @@ const SignUpPage = () => {
               1
             </div>
             <span
-              className={`text-xs ${currentStep === 1 ? "text-gray-600" : "text-gray-400"}`}
+              className={`text-xs text-center hidden sm:block ${currentStep === 1 ? "text-gray-600" : "text-gray-400"}`}
             >
               Enter your email address
             </span>
@@ -128,7 +128,7 @@ const SignUpPage = () => {
               2
             </div>
             <span
-              className={`text-xs ${currentStep === 2 ? "text-gray-600" : "text-gray-400"}`}
+              className={`text-xs text-center hidden sm:block ${currentStep === 2 ? "text-gray-600" : "text-gray-400"}`}
             >
               Provide your basic info
             </span>
@@ -145,7 +145,7 @@ const SignUpPage = () => {
               3
             </div>
             <span
-              className={`text-xs ${currentStep === 3 ? "text-gray-600" : "text-gray-400"}`}
+              className={`text-xs text-center hidden sm:block ${currentStep === 3 ? "text-gray-600" : "text-gray-400"}`}
             >
               Create your password
             </span>
@@ -171,6 +171,7 @@ const SignUpPage = () => {
                     id="email"
                     name="email"
                     type="email"
+                    placeholder="Enter you email address"
                     required
                     className={`text-black block w-full px-3 py-2 border rounded-md ${
                       error ? "border-red-500" : "border-gray-300"
@@ -196,6 +197,7 @@ const SignUpPage = () => {
                     id="name"
                     name="name"
                     type="text"
+                    placeholder="Enter you full name"
                     required
                     className={`text-black block w-full px-3 py-2 border rounded-md ${
                       error ? "border-red-500" : "border-gray-300"
@@ -216,6 +218,7 @@ const SignUpPage = () => {
                     <select
                       id="role"
                       name="role"
+                      placeholder="Property owner or User"
                       required
                       className={`text-black block w-full px-4 py-2 border rounded-md bg-white cursor-pointer ${
                         error ? "border-red-500" : "border-gray-300"
@@ -245,6 +248,7 @@ const SignUpPage = () => {
                   <input
                     id="password"
                     name="password"
+                    placeholder="Password"
                     type={showPassword ? "text" : "password"}
                     required
                     className={`text-black block w-full px-3 py-2 border rounded-md pr-10 ${
@@ -280,6 +284,7 @@ const SignUpPage = () => {
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
+                    placeholder="Confirm your password"
                     type={showConfirmPassword ? "text" : "password"}
                     required
                     className={`text-black block w-full px-3 py-2 border rounded-md pr-10 ${
@@ -312,22 +317,23 @@ const SignUpPage = () => {
             {/* Error */}
             {error && <p className="text-sm text-red-600">{error}</p>}
 
-            {/*Next or Submit*/}
-            <div className="flex justify-evenly md:justify-normal md:gap-4">
-              <button
-                type="button"
-                onClick={() => setCurrentStep((prev) => prev - 1)}
-                disabled={currentStep === 1}
-                className={`w-fit flex justify-center py-2 px-10 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600
-                    ${currentStep === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-              >
-                Back
-              </button>
+            {/*Back - Next - Submit*/}
+            <div className="flex flex-col sm:flex-row gap-3 px-4 sm:px-0">
+              {currentStep > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep((prev) => prev - 1)}
+                  className="w-full sm:w-auto sm:px-10 flex justify-center py-2 px-10 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 bg-gray-300 hover:bg-gray-400 cursor-pointer"
+                >
+                  Back
+                </button>
+              )}
+
               {currentStep < 3 ? (
                 <button
                   type="button"
                   onClick={handleNextStep}
-                  className="w-fit flex justify-center py-2 px-10 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600  cursor-pointer"
+                  className="w-full sm:w-auto sm:px-10 flex justify-center py-2 px-10 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600  cursor-pointer"
                 >
                   Next
                 </button>
@@ -335,7 +341,7 @@ const SignUpPage = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-fit flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 cursor-pointer "
+                  className="w-full sm:w-auto sm:px-10  flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 cursor-pointer "
                 >
                   {loading ? "Creating account..." : "Create account"}
                 </button>
