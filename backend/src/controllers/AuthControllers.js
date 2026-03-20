@@ -40,7 +40,28 @@ const login = async (req, res) => {
   }
 };
 
+const googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const result = await AuthServices.googleLogin(token);
+    if (!result.success) {
+      return res.status(400).json({ message: result.message });
+    }
+    res.status(200).json({
+      success: true,
+      message: `Successfully signed in with Google`,
+      token: result.data.token,
+      role: result.data.role,
+      id: result.data.id,
+    });
+  } catch (error) {
+    console.log("Error in Google login");
+    res.status(500).json({ message: "Error in googleLogin request" });
+  }
+};
+
 export default {
   signup,
   login,
+  googleLogin,
 };

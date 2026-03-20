@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../model/UserSchema.js";
+import { OAuth2Client } from "google-auth-library";
 
 const signup = async (data) => {
   if (!data.password || data.password.trim().length < 8) {
@@ -33,8 +34,6 @@ const signup = async (data) => {
       process.env.JWT_SECRET, //secret key in env
       { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }, //token expiry in env
     );
-
-    
 
     return {
       success: true,
@@ -102,7 +101,69 @@ const login = async (data) => {
   }
 };
 
+const client = new OAuth2Client();
+
+const googleLogin = async (token) => {
+  try {
+    const googleRes = await fetch(
+      `https://www.googleapis.com/oauth2/v3/userinfo`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    const googleUser = await googleRes.json();
+    const googleEmail = await User.findOne({ email: googleUser.email });
+    if (googleEmail) {
+      const jwtToken = jwt.sign(
+        {
+          id: googleEmail._id,
+          role: googleEmail.role,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES_IN || "7d" },
+      );
+      return {
+        success: true,
+        data: {
+          token: jwtToken,
+          role: googleEmail.role,
+          id: googleEmail._id,
+        },
+      };
+    } else {
+      const newUser = new User({
+        name: googleUser.name,
+        email: googleUser.email,
+        password: "google-oauth", // No password for Google users
+        role: "user",
+      });
+      const savedUser = await newUser.save();
+      const jwtToken = jwt.sign(
+        {
+          id: savedUser._id,
+          role: savedUser.role,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES_IN || "7d" },
+      );
+      return {
+        success: true,
+        data: {
+          token: jwtToken,
+          role: savedUser.role,
+          id: savedUser._id,
+        },
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "Error in googleLogin service",
+      data: null,
+    };
+  }
+};
+
 export default {
   signup,
   login,
+  googleLogin,
 };

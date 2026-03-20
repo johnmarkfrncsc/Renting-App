@@ -3,6 +3,7 @@ import api from "../api/axios.js";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const LoginPage = () => {
   const { login } = useContext(AuthContext);
@@ -42,6 +43,32 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const response = await api.post("/auth/google", {
+          token: tokenResponse.access_token,
+        });
+        if (response?.data?.success) {
+          const userData = login(
+            response.data.token,
+            response.data.role,
+            response.data.id,
+          );
+          if (userData.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
+        } else {
+          setError(response?.data?.message || "Google sign in failed.");
+        }
+      } catch (error) {
+        setError("Google sign in failed, Please try again");
+      }
+    },
+  });
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4">
@@ -139,6 +166,7 @@ const LoginPage = () => {
       <button
         type="button"
         className="w-full max-w-sm mt-3 py-2.5 rounded-full border border-gray-300 text-sm font-semibold text-gray-800 bg-white hover:bg-gray-50 transition-colors flex items-center justify-center gap-3"
+        onClick={() => handleGoogleLogin()}
       >
         <svg width="18" height="18" viewBox="0 0 48 48">
           <path

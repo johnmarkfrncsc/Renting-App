@@ -1,11 +1,11 @@
 import express from "express";
 import AuthController from "../controllers/AuthControllers.js";
-import AuthValidation from "../middleware/validations/AuthValidation.js";
 
 const router = express.Router();
 
 router.post("/signup", AuthController.signup);
 router.post("/login", AuthController.login);
+router.post("/google", AuthController.googleLogin);
 
 export default router;
 
