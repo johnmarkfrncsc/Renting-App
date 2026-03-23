@@ -1,7 +1,6 @@
-import jwt from "jsonwebtoken";
+import generateToken from "../utils/generateToken.js";
 import bcrypt from "bcrypt";
 import User from "../model/UserSchema.js";
-import { OAuth2Client } from "google-auth-library";
 
 const signup = async (data) => {
   if (!data.password || data.password.trim().length < 8) {
@@ -27,13 +26,8 @@ const signup = async (data) => {
     });
 
     const savedUser = await user.save();
-    const { password, ...userWithoutPassword } = savedUser.toObject();
 
-    const token = jwt.sign(
-      { id: savedUser._id, role: savedUser.role },
-      process.env.JWT_SECRET, //secret key in env
-      { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }, //token expiry in env
-    );
+    const token = generateToken(savedUser._id, savedUser.role);
 
     return {
       success: true,
@@ -78,11 +72,7 @@ const login = async (data) => {
       };
     }
 
-    const token = jwt.sign(
-      { id: loginUser._id, role: loginUser.role },
-      process.env.JWT_SECRET, //secret key in env
-      { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }, //token expiry in env
-    );
+    const token = generateToken(loginUser._id, loginUser.role);
 
     return {
       success: true,
@@ -101,8 +91,6 @@ const login = async (data) => {
   }
 };
 
-const client = new OAuth2Client();
-
 const googleLogin = async (token) => {
   try {
     const googleRes = await fetch(
@@ -112,18 +100,11 @@ const googleLogin = async (token) => {
     const googleUser = await googleRes.json();
     const googleEmail = await User.findOne({ email: googleUser.email });
     if (googleEmail) {
-      const jwtToken = jwt.sign(
-        {
-          id: googleEmail._id,
-          role: googleEmail.role,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRES_IN || "7d" },
-      );
+      const token = generateToken(googleEmail._id, googleEmail.role);
       return {
         success: true,
         data: {
-          token: jwtToken,
+          token,
           role: googleEmail.role,
           id: googleEmail._id,
         },
@@ -136,18 +117,12 @@ const googleLogin = async (token) => {
         role: "user",
       });
       const savedUser = await newUser.save();
-      const jwtToken = jwt.sign(
-        {
-          id: savedUser._id,
-          role: savedUser.role,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRES_IN || "7d" },
-      );
+
+      const token = generateToken(savedUser._id, savedUser.role);
       return {
         success: true,
         data: {
-          token: jwtToken,
+          token,
           role: savedUser.role,
           id: savedUser._id,
         },

@@ -12,7 +12,10 @@ dotenv.config();
 
 app.use(cors());
 app.use(express.json());
-
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  next();
+});
 app.use("/api/rents", ApiRoutes);
 app.use("/api/users", UserRoutes);
 app.use("/api/auth", AuthRoutess);
