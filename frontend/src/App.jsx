@@ -9,7 +9,6 @@ import PrivateRoute from "./routes/PrivateRoute.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import OverviewPage from "./pages/OverviewPage.jsx";
 import Portfolio from "./pages/PortfolioPage.jsx";
-import AddListingPage from "./pages/AddListingPage.jsx";
 
 function App() {
   return (
@@ -28,7 +27,6 @@ function App() {
             <Route index element={<Navigate to="/admin/overview" />} />
             <Route path="overview" element={<OverviewPage />} />
             <Route path="portfolio" element={<Portfolio />} />
-            <Route path="add-listing" element={<AddListingPage />} />
           </Route>
           <Route
             path="/"
