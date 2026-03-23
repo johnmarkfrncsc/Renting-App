@@ -1,11 +1,11 @@
 import PropertyTable from "../components/PropertyTable.jsx";
 import { useState } from "react";
 import { Plus, Download } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import AddListingSidebar from "../components/AddListingSidebar.jsx";
 
 const PortfolioPage = () => {
-  const navigate = useNavigate();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div>
@@ -20,7 +20,7 @@ const PortfolioPage = () => {
               <Download size={16} /> Import
             </button>
             <button
-              onClick={() => navigate("/admin/add-listing")}
+              onClick={() => setIsSidebarOpen(true)}
               className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 cursor-pointer transition-colors bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-500"
             >
               <Plus size={16} /> Add Property
@@ -31,6 +31,13 @@ const PortfolioPage = () => {
 
       {/* Table */}
       <PropertyTable refreshTrigger={refreshTrigger} />
+
+      {/* Add List Sidebar */}
+      <AddListingSidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        onSuccess={() => setRefreshTrigger((prev) => prev + 1)}
+      />
     </div>
   );
 };
