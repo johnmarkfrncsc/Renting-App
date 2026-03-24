@@ -166,7 +166,11 @@ const AddListingSidebar = ({ isOpen, onClose, onSuccess }) => {
         border-gray-200"
         >
           <h1 className="text-xl font-bold tracking-tight">Add Property</h1>
-          <button onClick={handleClose}>X</button>
+          <X
+            type="button"
+            className="cursor-pointer hover:bg-gray-200 hover:rounded-full"
+            onClick={handleClose}
+          />
         </div>
 
         {/* Scrollable Form Area */}

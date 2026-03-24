@@ -6,6 +6,7 @@ import { useModal } from "./hooks/useModal";
 import ViewPropertyModal from "./ViewPropertyModal";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import ActionMenu from "./ActionMenu";
+import TableSkeleton from "./TableSkeleton";
 
 const PropertyTable = ({ refreshTrigger }) => {
   const { user } = useContext(AuthContext);
@@ -156,11 +157,7 @@ const PropertyTable = ({ refreshTrigger }) => {
 
       {/* Table */}
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-        {isLoading && (
-          <div className="flex items-center justify-center p-8">
-            <Loader size={24} className="animate-spin text-gray-400" />
-          </div>
-        )}
+        {isLoading && <TableSkeleton />}
 
         {error && (
           <div className="flex items-center gap-2 p-4 bg-red-50 text-red-700 border-b border-red-200">
