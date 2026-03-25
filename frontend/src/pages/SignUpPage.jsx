@@ -3,9 +3,11 @@ import api from "../api/axios.js";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const SignUpPage = () => {
   const { login } = useContext(AuthContext);
+  const [googleToken, setGoogleToken] = useState(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -31,6 +33,7 @@ const SignUpPage = () => {
       setError("Please fill in all fields");
       return;
     }
+
     setError("");
     setCurrentStep((prev) => prev + 1);
   };
@@ -48,12 +51,44 @@ const SignUpPage = () => {
     setError("");
     setPasswordError("");
 
+    if (googleToken) {
+      if (!formData.role) {
+        setError("Please select your role");
+        setLoading(false);
+        return;
+      }
+      try {
+        const response = await api.post("auth/google", {
+          token: googleToken,
+          role: formData.role === "property owner" ? "admin" : "user",
+        });
+        if (response?.data?.success) {
+          const userData = login(
+            response.data.token,
+            response.data.role,
+            response.data.id,
+          );
+          if (userData.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
+        } else {
+          setError(response?.data?.message || "Google sign up failed");
+        }
+      } catch (err) {
+        setError("Google sign up failed. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
     if (formData.password != formData.confirmPassword) {
       setPasswordError("Password do not match.");
       setLoading(false);
       return;
     }
-
     try {
       const response = await api.post("/auth/signup", {
         name: formData.name,
@@ -83,6 +118,32 @@ const SignUpPage = () => {
       setLoading(false);
     }
   };
+
+  const handleGooogleSignup = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const googleRes = await fetch(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+          },
+        );
+        const googleUser = await googleRes.json();
+
+        setGoogleToken(tokenResponse.access_token); //temporary storage for token
+
+        setFormData((prev) => ({
+          ...prev,
+          email: googleUser.email,
+          name: googleUser.name,
+        }));
+
+        setCurrentStep(2);
+      } catch (error) {
+        setError("Google sign up failed, Please try again");
+      }
+    },
+  });
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -322,14 +383,25 @@ const SignUpPage = () => {
               {currentStep > 1 && (
                 <button
                   type="button"
-                  onClick={() => setCurrentStep((prev) => prev - 1)}
+                  onClick={() => {
+                    setCurrentStep((prev) => prev - 1);
+                    setGoogleToken(null);
+                  }}
                   className="w-full sm:w-auto sm:px-10 flex justify-center py-2 px-10 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 bg-gray-300 hover:bg-gray-400 cursor-pointer"
                 >
                   Back
                 </button>
               )}
 
-              {currentStep < 3 ? (
+              {currentStep === 2 && googleToken ? (
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full sm:w-auto sm:px-10  flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 cursor-pointer "
+                >
+                  {loading ? "Creating account..." : "Create account"}
+                </button>
+              ) : currentStep < 3 ? (
                 <button
                   type="button"
                   onClick={handleNextStep}
@@ -358,6 +430,7 @@ const SignUpPage = () => {
           <button
             type="button"
             className="w-full mt-3 py-2.5 rounded-full border border-gray-300 text-sm font-semibold text-gray-800 bg-white hover:bg-gray-50 transition-colors flex items-center justify-center gap-3"
+            onClick={() => handleGooogleSignup()}
           >
             <svg width="18" height="18" viewBox="0 0 48 48">
               <path
