@@ -1,9 +1,11 @@
 import express from "express";
-import UserControllers from "../controllers/UserControllers.js";
+import getAllUsersController from "../controllers/UserControllers/getAllUsers.js";
+import postUsersController from "../controllers/UserControllers/postUsers.js";
+import { get } from "mongoose";
 
 const router = express.Router();
 
-router.get("/", UserControllers.getAllUsers);
-router.post("/", UserControllers.postUsers);
+router.get("/", getAllUsersController);
+router.post("/", postUsersController);
 
 export default router;
