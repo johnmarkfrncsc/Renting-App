@@ -2,9 +2,9 @@ import googleLoginServices from "../../services/AuthServices/googleLoginServices
 
 const googleLogin = async (req, res) => {
   try {
-    const { token } = req.body;
+    const { token, role } = req.body;
 
-    const result = await googleLoginServices(token);
+    const result = await googleLoginServices(token, role);
 
     if (!result.success) {
       return res.status(400).json({ message: result.message });
