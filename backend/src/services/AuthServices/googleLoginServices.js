@@ -1,7 +1,7 @@
 import generateToken from "../../utils/generateToken.js";
 import User from "../../model/UserSchema.js";
 
-const googleLoginService = async (googleToken) => {
+const googleLoginService = async (googleToken, role) => {
   try {
     const googleRes = await fetch(
       `https://www.googleapis.com/oauth2/v3/userinfo`,
@@ -36,7 +36,7 @@ const googleLoginService = async (googleToken) => {
       name: googleUser.name,
       email,
       password: "google-oauth", // No password for Google users
-      role: "user",
+      role: role || "user",
     });
     const savedUser = await newUser.save();
     const token = generateToken(savedUser._id, savedUser.role);

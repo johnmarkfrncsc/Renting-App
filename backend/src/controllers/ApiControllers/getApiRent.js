@@ -6,7 +6,7 @@ const getApiRent = async (req, res) => {
     const result = await getApiRentService(rentCategory);
 
     if (!result.success) {
-      return res.status(500).json({
+      return res.status(400).json({
         success: false,
         message: result.message || "Error in fetching all rents",
       });
