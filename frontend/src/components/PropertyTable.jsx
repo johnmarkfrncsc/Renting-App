@@ -1,5 +1,11 @@
 import { useState, useEffect, useContext } from "react";
-import { Search, MoreHorizontal, Loader, AlertCircle } from "lucide-react";
+import {
+  Search,
+  MoreHorizontal,
+  Loader,
+  AlertCircle,
+  Inbox,
+} from "lucide-react";
 import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
 import { useModal } from "./hooks/useModal";
@@ -165,6 +171,7 @@ const PropertyTable = ({ refreshTrigger }) => {
         )}
         {!isLoading && filteredProperties.length === 0 && !error && (
           <div className="flex flex-col items-center justify-center p-8 text-gray-500">
+            <Inbox className="h-10 w-20" />
             <p className="text-sm">No properties found</p>
             <p className="text-xs mt-1">
               Create your first listing to get started
@@ -172,48 +179,51 @@ const PropertyTable = ({ refreshTrigger }) => {
           </div>
         )}
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left min-w-[800px]">
-            <thead className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 ">
-              <tr>
-                <th className="px-6 py-4 uppercase">Property</th>
-                <th className="px-6 py-4 uppercase">Type</th>
-                <th className="px-6 py-4 uppercase">Status</th>
-                <th className="px-6 py-4 uppercase whitespace-nowrap">
-                  Market Rent
-                </th>
-                <th className="px-6 py-4 uppercase whitespace-nowrap">
-                  Tenant Name
-                </th>
-                <th className="px-6 py-4 uppercase text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-sm">
-              {isLoading ? (
-                <TableSkeleton />
-              ) : (
-                filteredProperties.map((property, index) => (
-                  <PropertyRow
-                    key={property._id}
-                    property={property}
-                    onView={() => {
-                      setSelectedProperty(property);
-                      openViewModal();
-                    }}
-                    onDelete={() => {
-                      setPropertyToDelete(property);
-                      openDeleteModal();
-                    }}
-                    openMenuId={openMenuId}
-                    onMenuToggle={() => handleMenuToggle(property._id)}
-                    index={index}
-                    totalCount={filteredProperties.length}
-                  />
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        {!isLoading ||
+          (filteredProperties.length === 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left min-w-[800px]">
+                <thead className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 ">
+                  <tr>
+                    <th className="px-6 py-4 uppercase">Property</th>
+                    <th className="px-6 py-4 uppercase">Type</th>
+                    <th className="px-6 py-4 uppercase">Status</th>
+                    <th className="px-6 py-4 uppercase whitespace-nowrap">
+                      Market Rent
+                    </th>
+                    <th className="px-6 py-4 uppercase whitespace-nowrap">
+                      Tenant Name
+                    </th>
+                    <th className="px-6 py-4 uppercase text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 text-sm">
+                  {isLoading ? (
+                    <TableSkeleton />
+                  ) : (
+                    filteredProperties.map((property, index) => (
+                      <PropertyRow
+                        key={property._id}
+                        property={property}
+                        onView={() => {
+                          setSelectedProperty(property);
+                          openViewModal();
+                        }}
+                        onDelete={() => {
+                          setPropertyToDelete(property);
+                          openDeleteModal();
+                        }}
+                        openMenuId={openMenuId}
+                        onMenuToggle={() => handleMenuToggle(property._id)}
+                        index={index}
+                        totalCount={filteredProperties.length}
+                      />
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          ))}
       </div>
 
       {/* View/Edit Modal */}
