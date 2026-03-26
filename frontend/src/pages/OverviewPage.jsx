@@ -6,10 +6,10 @@ import { Building2, CheckCircle, XCircle, DollarSign } from "lucide-react";
 import useOverviewData from "../components/hooks/useOverviewData.js";
 import getOverviewStats from "../utils/getOverviewStats.js";
 
-import StatsCard from "../components/cards/overviewCards/StatsCard";
-import OccupancyCard from "../components/cards/overviewCards/OccupancyCard";
-import RecentProperties from "../components/RecentProperties.jsx";
-import RevenueChart from "../components/RevenueChart";
+import StatsCard from "../components/cards/StatsCard.jsx";
+import OccupancyCard from "../components/cards/OccupancyCard.jsx";
+import RecentProperties from "../components/overview/RecentProperties.jsx";
+import RevenueChart from "../components/overview/RevenueChart.jsx";
 
 const OverviewPage = () => {
   const { user } = useContext(AuthContext);
