@@ -1,7 +1,7 @@
 import PropertyTable from "../components/portfolio/PropertyTable.jsx";
 import { useState } from "react";
 import { Plus, Download } from "lucide-react";
-import AddListingSidebar from "../components/AddListingSidebar.jsx";
+import AddListingSidebar from "../components/portfolio/AddListingSidebar.jsx";
 
 const PortfolioPage = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);

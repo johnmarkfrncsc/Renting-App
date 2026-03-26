@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
 import { Building2, CheckCircle, XCircle, DollarSign } from "lucide-react";
 
@@ -13,7 +12,6 @@ import RevenueChart from "../components/overview/RevenueChart.jsx";
 
 const OverviewPage = () => {
   const { user } = useContext(AuthContext);
-
   const { properties, isLoading, error } = useOverviewData(user.id);
 
   const {
@@ -30,35 +28,35 @@ const OverviewPage = () => {
       label: "Total Properties",
       value: totalProperties,
       icon: <Building2 size={20} />,
-      iconBg: "bg-gray-200",
-      iconColor: "text-gray-600",
+      iconBg: "bg-base-300",
+      iconColor: "text-base-content",
     },
     {
       label: "Occupied",
       value: occupiedProperties.length,
       icon: <CheckCircle size={20} />,
-      iconBg: "bg-green-100",
-      iconColor: "text-green-600",
+      iconBg: "bg-success/80",
+      iconColor: "text-success-content",
     },
     {
       label: "Vacant",
       value: vacantProperties.length,
       icon: <XCircle size={20} />,
-      iconBg: "bg-yellow-100",
-      iconColor: "text-yellow-600",
+      iconBg: "bg-warning/80",
+      iconColor: "text-warning-content",
     },
     {
       label: "Total Monthly Revenue",
       value: `$${totalRevenue.toLocaleString()}`,
       icon: <DollarSign size={20} />,
-      iconBg: "bg-blue-100",
-      iconColor: "text-blue-600",
+      iconBg: "bg-info/90",
+      iconColor: "text-info-content",
     },
   ];
 
   return (
     <div>
-      <h2 className="text-3xl font-bold mb-6">Overview</h2>
+      <h2 className="text-3xl font-bold text-base-content mb-6">Overview</h2>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
@@ -73,11 +71,13 @@ const OverviewPage = () => {
         vacant={vacantProperties.length}
       />
 
-      <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm mb-6">
-        <h3 className="text-sm font-semibold mb-4">Recent Properties</h3>
-
+      {/* Recent Properties */}
+      <div className="bg-base-100 border border-base-300 rounded-xl p-6 shadow-sm mb-6">
+        <h3 className="text-sm font-semibold text-base-content mb-4">
+          Recent Properties
+        </h3>
         <table className="w-full text-left">
-          <thead className="text-gray-700 bg-gray-50 text-xs">
+          <thead className="text-base-content/60 bg-base-200 text-xs">
             <tr>
               <th className="px-4 py-4">Property</th>
               <th className="px-4 py-4">Price</th>
@@ -90,7 +90,6 @@ const OverviewPage = () => {
           </tbody>
         </table>
       </div>
-
       <RevenueChart occupied={occupiedProperties} />
     </div>
   );

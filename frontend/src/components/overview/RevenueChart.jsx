@@ -15,18 +15,27 @@ const RevenueChart = ({ occupied }) => {
   }));
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
-      <h3 className="text-sm font-semibold text-gray-700 mb-4">
+    <div className="bg-base-100 border border-base-300 rounded-xl p-6 shadow-sm mb-6">
+      <h3 className="text-sm font-semibold text-base-content mb-4">
         Revenue per Property
       </h3>
-
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
-          <CartesianGrid />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="revenue" fill="#4F46E5" barSize={75} />
+          <CartesianGrid stroke="currentColor" strokeOpacity={0.1} />
+          <XAxis
+            dataKey="name"
+            tick={{ fill: "currentColor", opacity: 0.6, fontSize: 12 }}
+          />
+          <YAxis tick={{ fill: "currentColor", opacity: 0.6, fontSize: 12 }} />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "var(--color-base-200)",
+              border: "1px solid var(--color-base-300)",
+              borderRadius: "0.5rem",
+              color: "var(--color-base-content)",
+            }}
+          />
+          <Bar dataKey="revenue" fill="var(--color-primary)" barSize={75} />
         </BarChart>
       </ResponsiveContainer>
     </div>
