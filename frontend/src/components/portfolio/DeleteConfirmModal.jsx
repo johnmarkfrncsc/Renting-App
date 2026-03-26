@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../api/axios";
+import api from "../../api/axios";
 
 const DeleteConfirmModal = ({ isOpen, onClose, onDelete, property }) => {
   const [isLoading, setIsLoading] = useState(false);

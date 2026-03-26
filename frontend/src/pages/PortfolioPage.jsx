@@ -1,4 +1,4 @@
-import PropertyTable from "../components/PropertyTable.jsx";
+import PropertyTable from "../components/portfolio/PropertyTable.jsx";
 import { useState } from "react";
 import { Plus, Download } from "lucide-react";
 import AddListingSidebar from "../components/AddListingSidebar.jsx";
