@@ -10,7 +10,7 @@ const PropertyFilters = ({
 }) => {
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6 flex flex-col lg:flex-row gap-4 lg:items-center justify-between">
-      <div className="relative w-full lg:w-72">
+      <div className="relative w-full flex-1">
         <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
         <input
           type="text"
