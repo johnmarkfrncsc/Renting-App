@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { AlertCircle, Inbox } from "lucide-react";
-import api from "../api/axios";
-import { AuthContext } from "../context/AuthContext";
-import { useModal } from "../components/hooks/useModal";
-import ViewPropertyModal from "../components/portfolio/ViewPropertyModal";
-import DeleteConfirmModal from "./portfolio/DeleteConfirmModal";
-import TableSkeleton from "../components/portfolio/TableSkeleton";
-import PropertyFilters from "../components/portfolio/PropertyFilters";
-import PropertyRow from "../components/portfolio/PropertyRow";
+import api from "../../api/axios";
+import { AuthContext } from "../../context/AuthContext";
+import { useModal } from "../../components/hooks/useModal";
+import ViewPropertyModal from "../portfolio/ViewPropertyModal";
+import DeleteConfirmModal from "../portfolio/DeleteConfirmModal";
+import TableSkeleton from "../portfolio/TableSkeleton";
+import PropertyFilters from "../portfolio/PropertyFilters";
+import PropertyRow from "../portfolio/PropertyRow";
 
 const PropertyTable = ({ refreshTrigger }) => {
   const { user } = useContext(AuthContext);
