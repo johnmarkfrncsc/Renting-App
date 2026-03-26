@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import api from "../api/axios";
+import api from "../../api/axios";
 import { CloudUpload, X } from "lucide-react";
 
 const rentCategory = [
