@@ -157,15 +157,12 @@ const PropertyTable = ({ refreshTrigger }) => {
 
       {/* Table */}
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-        {isLoading && <TableSkeleton />}
-
         {error && (
           <div className="flex items-center gap-2 p-4 bg-red-50 text-red-700 border-b border-red-200">
             <AlertCircle size={18} />
             <span className="text-sm">{error}</span>
           </div>
         )}
-
         {!isLoading && filteredProperties.length === 0 && !error && (
           <div className="flex flex-col items-center justify-center p-8 text-gray-500">
             <p className="text-sm">No properties found</p>
@@ -175,25 +172,27 @@ const PropertyTable = ({ refreshTrigger }) => {
           </div>
         )}
 
-        {!isLoading && filteredProperties.length > 0 && (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left min-w-[800px]">
-              <thead className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 ">
-                <tr>
-                  <th className="px-6 py-4 uppercase">Property</th>
-                  <th className="px-6 py-4 uppercase">Type</th>
-                  <th className="px-6 py-4 uppercase">Status</th>
-                  <th className="px-6 py-4 uppercase whitespace-nowrap">
-                    Market Rent
-                  </th>
-                  <th className="px-6 py-4 uppercase whitespace-nowrap">
-                    Tenant Name
-                  </th>
-                  <th className="px-6 py-4 uppercase text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 text-sm">
-                {filteredProperties.map((property, index) => (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[800px]">
+            <thead className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 ">
+              <tr>
+                <th className="px-6 py-4 uppercase">Property</th>
+                <th className="px-6 py-4 uppercase">Type</th>
+                <th className="px-6 py-4 uppercase">Status</th>
+                <th className="px-6 py-4 uppercase whitespace-nowrap">
+                  Market Rent
+                </th>
+                <th className="px-6 py-4 uppercase whitespace-nowrap">
+                  Tenant Name
+                </th>
+                <th className="px-6 py-4 uppercase text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 text-sm">
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                filteredProperties.map((property, index) => (
                   <PropertyRow
                     key={property._id}
                     property={property}
@@ -210,11 +209,11 @@ const PropertyTable = ({ refreshTrigger }) => {
                     index={index}
                     totalCount={filteredProperties.length}
                   />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* View/Edit Modal */}
