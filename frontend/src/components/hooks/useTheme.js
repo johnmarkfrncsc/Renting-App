@@ -11,9 +11,17 @@ const useTheme = () => {
 
   const toggleTheme = () => {
     const newTheme = isDark ? "light" : "dark";
+
+    document.documentElement.classList.add("no-transitions");
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("theme", newTheme);
     setIsDark(!isDark);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove("no-transitions");
+      });
+    });
   };
 
   return { isDark, toggleTheme };

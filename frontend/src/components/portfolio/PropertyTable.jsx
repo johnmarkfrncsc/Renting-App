@@ -32,7 +32,6 @@ const PropertyTable = ({ refreshTrigger }) => {
     closeModal: closeDeleteModal,
   } = useModal();
 
-  // Fetch
   const fetchUserProperties = async () => {
     if (!user?.id) return;
     setIsLoading(true);
@@ -63,10 +62,8 @@ const PropertyTable = ({ refreshTrigger }) => {
     fetchUserProperties();
   }, [selectedProperty, refreshTrigger]);
 
-  // Search + filter
   useEffect(() => {
     let result = properties;
-
     if (searchTerm.trim()) {
       result = result.filter(
         (p) =>
@@ -74,17 +71,14 @@ const PropertyTable = ({ refreshTrigger }) => {
           p.rentAddress.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
-
     if (statusFilter) {
       result = result.filter(
         (p) => p.rentStatus.toLowerCase() === statusFilter.toLowerCase(),
       );
     }
-
     setFilteredProperties(result);
   }, [searchTerm, statusFilter, properties]);
 
-  // Close action menu on outside click
   useEffect(() => {
     const handleClickOutside = () => setOpenMenuId(null);
     document.addEventListener("mousedown", handleClickOutside);
@@ -104,9 +98,9 @@ const PropertyTable = ({ refreshTrigger }) => {
         onStatusChange={setStatusFilter}
       />
 
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-base-100 border border-base-300 rounded-xl overflow-hidden shadow-sm">
         {error && (
-          <div className="flex items-center gap-2 p-4 bg-red-50 text-red-700 border-b border-red-200">
+          <div className="flex items-center gap-2 p-4 bg-error/10 text-error border-b border-error/20">
             <AlertCircle size={18} />
             <span className="text-sm">{error}</span>
           </div>
@@ -114,7 +108,7 @@ const PropertyTable = ({ refreshTrigger }) => {
 
         {/* Empty state */}
         {!isLoading && filteredProperties.length === 0 && !error && (
-          <div className="flex flex-col items-center justify-center p-8 text-gray-500">
+          <div className="flex flex-col items-center justify-center p-8 text-base-content/50">
             <Inbox className="h-10 w-20" />
             <p className="text-sm">No properties found</p>
             <p className="text-xs mt-1">
@@ -127,7 +121,7 @@ const PropertyTable = ({ refreshTrigger }) => {
         {(isLoading || filteredProperties.length > 0) && !error && (
           <div className="overflow-x-auto">
             <table className="w-full text-left min-w-[800px]">
-              <thead className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500">
+              <thead className="bg-base-200 border-b border-base-300 text-xs font-semibold text-base-content/60">
                 <tr>
                   <th className="px-6 py-4 uppercase">Property</th>
                   <th className="px-6 py-4 uppercase">Type</th>
@@ -141,7 +135,7 @@ const PropertyTable = ({ refreshTrigger }) => {
                   <th className="px-6 py-4 uppercase text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 text-sm">
+              <tbody className="divide-y divide-base-300 text-sm">
                 {isLoading ? (
                   <TableSkeleton />
                 ) : (
