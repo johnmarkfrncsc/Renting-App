@@ -72,9 +72,9 @@ const Sidebar = ({ isMenuOpen, onClose, handleLogout }) => {
       <div className="flex items-center justify-between p-4 mb-4">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center text-white font-bold">
-            P
+            R
           </div>
-          <h1 className="text-xl font-bold tracking-tight">PrimeStay</h1>
+          <h1 className="text-xl font-bold tracking-tight">Rentara</h1>
         </div>
         <button className="md:hidden" onClick={onClose}>
           <X size={20} />
