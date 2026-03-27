@@ -28,7 +28,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-base-200 text-base-content font-sans overflow-hidden">
+    <div className="flex h-screen bg-base-100 text-base-content font-sans overflow-hidden">
       {/* Mobile Sidebar Overlay */}
       {isMenuOpen && (
         <div
@@ -78,7 +78,7 @@ const Sidebar = ({
   return (
     <aside
       className={`
-        fixed flex flex-col inset-y-0 left-0 z-50 w-55 bg-base-100 border-r border-base-300/50
+        fixed flex flex-col inset-y-0 left-0 z-50 w-55 bg-base-200 border-r border-base-300
         transform transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 
         ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
@@ -120,13 +120,36 @@ const Sidebar = ({
         {/* Bottom actions */}
         <div className="mt-auto pb-4 space-y-1">
           {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-base-content hover:bg-base-200"
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            {isDark ? "Light Mode" : "Dark Mode"}
-          </button>
+          <label className="relative flex items-center w-20 h-10 rounded-full bg-base-300 cursor-pointer px-2 transition-colors ml-2">
+            <input
+              type="checkbox"
+              checked={isDark}
+              onChange={toggleTheme}
+              className="sr-only peer"
+            />
+
+            {/* Sliding pill */}
+            <div
+              className="absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-base-100 shadow-md transition-all duration-300 
+                  left-1 peer-checked:left-11
+                  flex items-center justify-center"
+            >
+              <Sun
+                size={18}
+                className={`absolute transition-all duration-300 text-warning
+                  ${isDark ? "opacity-0 scale-50" : "opacity-100 scale-100"}`}
+              />
+              <Moon
+                size={18}
+                className={`absolute transition-all duration-300 text-base-content
+                  ${isDark ? "opacity-100 scale-100" : "opacity-0 scale-50"}`}
+              />
+            </div>
+
+            {/* Background icons */}
+            <Sun size={14} className="text-warning ml-2" />
+            <Moon size={14} className="text-base-content/40 ml-auto mr-2" />
+          </label>
 
           {/* Logout */}
           <div className="**:hover:bg-error/20 **:hover:text-error">

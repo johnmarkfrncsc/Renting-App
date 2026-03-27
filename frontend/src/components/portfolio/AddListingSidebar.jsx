@@ -135,7 +135,7 @@ const AddListingSidebar = ({ isOpen, onClose, onSuccess }) => {
   };
 
   const inputClass =
-    "w-full px-4 py-3 rounded-lg border border-base-300 bg-base-100 text-base-content placeholder:text-base-content/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm";
+    "w-full px-4 py-3 rounded-lg border border-base-300 bg-base-300 text-base-content placeholder:text-base-content/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm";
 
   const labelClass = "block text-sm font-semibold text-base-content mb-1.5";
 
@@ -145,12 +145,12 @@ const AddListingSidebar = ({ isOpen, onClose, onSuccess }) => {
     <div>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-40 backdrop-blur-sm bg-black/10"
+        className="fixed inset-0 z-40 backdrop-blur-sm bg-b/10"
         onClick={handleClose}
       />
 
       {/* Sidebar Panel */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-[400px] md:w-[480px] bg-base-100 shadow-xl flex flex-col">
+      <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-[400px] md:w-[480px] bg-base-200 shadow-xl flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-base-300">
           <h1 className="text-xl font-bold tracking-tight text-base-content">
@@ -331,12 +331,12 @@ const AddListingSidebar = ({ isOpen, onClose, onSuccess }) => {
             </div>
 
             {/* Buttons */}
-            <div className="flex items-center gap-3 pt-2 border-t border-base-300">
+            <div className="flex items-center gap-3 pt-2 border-t border-base-300 **:cursor-pointer">
               <button
                 type="button"
                 onClick={handleClose}
                 disabled={isLoading}
-                className="px-5 py-2.5 text-sm font-semibold text-base-content/60 border border-base-300 rounded-lg hover:bg-base-200 transition-colors disabled:opacity-50"
+                className="px-5 py-2.5 text-sm font-semibold text-base-content/60 border border-base-300 rounded-lg hover:bg-base-300 transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>

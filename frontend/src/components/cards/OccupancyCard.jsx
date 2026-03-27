@@ -1,6 +1,6 @@
 const OccupancyCard = ({ rate, occupied, vacant }) => {
   return (
-    <div className="border border-base-300 rounded-xl p-6 shadow-sm mb-6 bg-base-100">
+    <div className="border border-base-300 rounded-xl p-6 shadow-sm mb-6 bg-base-200">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-base-content">
           Occupancy Rate
