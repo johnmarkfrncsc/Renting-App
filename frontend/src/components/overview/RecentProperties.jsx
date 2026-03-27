@@ -1,6 +1,6 @@
 const RecentProperties = ({ property }) => {
   return (
-    <tr className="hover:bg-base-200 transition capitalize">
+    <tr className="hover:bg-base-300 transition capitalize">
       <td className="px-4 py-4">
         <div className="flex items-center gap-3">
           {property.rentImageURL ? (

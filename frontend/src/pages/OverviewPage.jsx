@@ -72,7 +72,7 @@ const OverviewPage = () => {
       />
 
       {/* Recent Properties */}
-      <div className="bg-base-100 border border-base-300 rounded-xl p-6 shadow-sm mb-6">
+      <div className="bg-base-200 border border-base-300 rounded-xl p-6 shadow-sm mb-6">
         <h3 className="text-sm font-semibold text-base-content mb-4">
           Recent Properties
         </h3>
