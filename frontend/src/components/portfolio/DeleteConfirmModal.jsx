@@ -26,7 +26,7 @@ const DeleteConfirmModal = ({ isOpen, onClose, onDelete, property }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="relative w-full max-w-sm sm:max-w-md bg-base-100 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div className="relative w-full max-w-sm sm:max-w-md bg-base-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-base-300">
           <h2 className="text-xl md:text-2xl font-bold text-base-content">
@@ -54,7 +54,7 @@ const DeleteConfirmModal = ({ isOpen, onClose, onDelete, property }) => {
           </p>
 
           {/* Property Preview */}
-          <div className="flex items-center gap-3 p-4 bg-base-200 rounded-lg border border-base-300">
+          <div className="flex items-center gap-3 p-4 bg-base-300 rounded-lg border border-base-300">
             {property.rentImageURL ? (
               <img
                 src={property.rentImageURL}
@@ -76,7 +76,7 @@ const DeleteConfirmModal = ({ isOpen, onClose, onDelete, property }) => {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end space-x-3 px-6 py-4 border-t border-base-300">
+        <div className="flex items-center justify-end space-x-3 px-6 py-4 border-t border-base-300 **:cursor-pointer">
           <button
             type="button"
             onClick={onClose}

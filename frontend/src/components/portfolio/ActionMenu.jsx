@@ -10,9 +10,9 @@ const ActionMenu = ({ isOpen, onView, onDelete, isLastRow }) => {
       className={`absolute right-0 ${menuPosition} z-10`}
       onMouseDown={(e) => e.stopPropagation()}
     >
-      <div className="bg-base-100 border border-base-300 min-w-[120px] rounded-lg shadow-lg">
+      <div className="bg-base-200 border border-base-300 min-w-[120px] rounded-lg shadow-lg">
         <button
-          className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-base-content hover:bg-base-200 transition-colors rounded-t-lg"
+          className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-base-content hover:bg-base-300 transition-colors rounded-t-lg"
           onClick={onView}
         >
           <Eye className="h-4 w-4" /> View

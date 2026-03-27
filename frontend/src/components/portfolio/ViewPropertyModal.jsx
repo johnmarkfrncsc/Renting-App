@@ -67,13 +67,13 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
 
   // reusable input class
   const inputClass = (editable = true) =>
-    `w-full px-4 py-3 rounded-lg border border-base-300 bg-base-100 text-base-content focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
+    `w-full px-4 py-3 rounded-lg border border-base-300 bg-base-300 text-base-content focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
       !editable ? "bg-base-200 cursor-not-allowed" : ""
     }`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="relative w-full max-w-sm sm:max-w-md md:max-w-md lg:max-w-lg bg-base-100 rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+      <div className="relative w-full max-w-sm sm:max-w-md md:max-w-md lg:max-w-lg bg-base-200 rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-base-300">
           <h2 className="text-xl md:text-2xl font-bold text-base-content">
@@ -232,11 +232,11 @@ const ViewPropertyModal = ({ isOpen, onClose, property, onUpdate }) => {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center justify-end space-x-3 pt-6 border-t border-base-300">
+          <div className="flex items-center justify-end space-x-3 pt-6 border-t border-base-300 **:cursor-pointer">
             <button
               type="button"
               onClick={handleCloseModal}
-              className={`px-5 py-2.5 text-sm font-bold text-base-content/60 hover:text-base-content bg-transparent hover:bg-base-200 rounded-lg transition-colors ${
+              className={`px-5 py-2.5 text-sm font-bold text-base-content/60 hover:text-base-content bg-base-300 rounded-lg transition-colors ${
                 isEditing ? "visible" : "invisible"
               }`}
             >

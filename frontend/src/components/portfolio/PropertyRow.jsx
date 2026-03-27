@@ -20,7 +20,7 @@ const PropertyRow = ({
   const isLastRow = index === totalCount - 1;
 
   return (
-    <tr className="hover:bg-base-200 transition-colors capitalize">
+    <tr className="hover:bg-base-300 transition-colors capitalize bg-base-200">
       <td className="px-6 py-4">
         <div className="flex items-center gap-3">
           {property.rentImageURL ? (
