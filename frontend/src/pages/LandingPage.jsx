@@ -6,16 +6,14 @@ import FeatureStrip from "../components/landing/feature/FeatureStrip";
 import CTABox from "../components/landing/feature/CTABox";
 
 const LandingPage = () => {
-  const { isDark, toggtleTheme } = useTheme();
-
   return (
     <div className="rn-root">
       <Navbar />
-      {/* <Hero />
+      <Hero />
       <FeaturedListing />
       <FeatureStrip />
       <CTABox />
-      <Footer /> */}
+      <Footer />
     </div>
   );
 };
