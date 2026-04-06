@@ -164,7 +164,7 @@ const Navbar = () => {
               onClick={() => setIsOpen(false)}
               className="w-full text-center py-3 rounded-xl text-sm font-medium bg-primary text-primary-content hover:opacity-85 transition"
             >
-              Sign up
+              Get started
             </Link>
           </div>
         </div>
