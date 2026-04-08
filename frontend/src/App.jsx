@@ -11,34 +11,28 @@ import Portfolio from "./pages/PortfolioPage.jsx";
 
 function App() {
   return (
-    <>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route
-            path="/admin"
-            element={
-              <PrivateRoute allowedRoles={["admin"]}>
-                <AdminPage />
-              </PrivateRoute>
-            }
-          >
-            <Route index element={<Navigate to="/admin/overview" />} />
-            <Route path="overview" element={<OverviewPage />} />
-            <Route path="portfolio" element={<Portfolio />} />
-          </Route>
-          <Route
-            path="/"
-            element={
-              <PrivateRoute allowedRoles={["user", "admin"]}>
-                <LandingPage />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/signup" element={<SignUpPage />} />
-        </Routes>
-      </AuthProvider>
-    </>
+    <AuthProvider>
+      <Routes>
+        {/* PUBLIC */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+
+        {/* ADMIN (PROTECTED) */}
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute allowedRoles={["admin"]}>
+              <AdminPage />
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<Navigate to="/admin/overview" />} />
+          <Route path="overview" element={<OverviewPage />} />
+          <Route path="portfolio" element={<Portfolio />} />
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }
 
