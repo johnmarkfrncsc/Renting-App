@@ -4,13 +4,14 @@ const putApiRent = async (req, res) => {
   try {
     const { id } = req.params;
     const data = req.body;
+    const userId = req.user.id || req.user._id;
 
-    const result = await putApiRentService(id, data);
+    const result = await putApiRentService(id, data, userId);
 
     if (!result.success) {
-      return res.status(404).json({
+      return res.status(result.status || 404).json({
         success: false,
-        message: "Rent not found",
+        message: result.message || "Rent not found",
       });
     }
 
