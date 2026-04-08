@@ -2,8 +2,11 @@ import getApiRentService from "../../services/ApiServices/getApiRent.js";
 
 const getApiRent = async (req, res) => {
   try {
-    const { rentCategory } = req.query;
-    const result = await getApiRentService(rentCategory);
+    const { rentCategory, rentType } = req.query;
+    const result = await getApiRentService({
+      rentCategory,
+      rentType,
+    });
 
     if (!result.success) {
       return res.status(400).json({

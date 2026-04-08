@@ -1,8 +1,10 @@
 import rentSchema from "../../model/RentSchema.js";
 
-const getApiRent = async (rentCategory) => {
+const getApiRent = async (filters) => {
   try {
     const query = {};
+
+    const { rentCategory, rentType } = filters;
 
     if (rentCategory) {
       query.rentCategory = {
@@ -10,7 +12,16 @@ const getApiRent = async (rentCategory) => {
         $options: "i",
       };
     }
+
+    if (rentType) {
+      query.rentType = {
+        $regex: rentType,
+        $options: "i",
+      };
+    }
+
     const rents = await rentSchema.find(query).sort({ createdAt: -1 });
+
     return {
       success: true,
       data: rents,
