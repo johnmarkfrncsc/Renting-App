@@ -1,4 +1,4 @@
-import featureStripData from "./data/featureStripData";
+import featureStripData from "../data/featureStripData";
 
 const FeatureStrip = () => {
   return (
