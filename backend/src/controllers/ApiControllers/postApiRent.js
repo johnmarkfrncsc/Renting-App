@@ -2,6 +2,13 @@ import postApiRentService from "../../services/ApiServices/postApiRent.js";
 
 const postApiRent = async (req, res) => {
   try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Only landlords can post a listing",
+      });
+    }
+
     const data = req.body;
     const userId = req.user.id || req.user._id;
 

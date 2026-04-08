@@ -2,14 +2,8 @@ import rentSchema from "../../model/RentSchema.js";
 
 const postApiRent = async (data) => {
   try {
-    const rentData = {
-      ...data,
-      rentTenant:
-        typeof data.rentTenant === "string" && data.rentTenant.trim() !== ""
-          ? data.rentTenant.trim()
-          : "No Tenant",
-    };
-    const rent = await new rentSchema(rentData).save();
+    const rent = await new rentSchema(data).save();
+
     return {
       success: true,
       data: rent,
@@ -17,7 +11,7 @@ const postApiRent = async (data) => {
   } catch (error) {
     return {
       success: false,
-      message: "Error saving rent",
+      message: error.message || "Error saving rent",
     };
   }
 };
