@@ -68,7 +68,9 @@ const PropertyTable = ({ refreshTrigger }) => {
       result = result.filter(
         (p) =>
           p.rentTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.rentAddress.toLowerCase().includes(searchTerm.toLowerCase()),
+          p.rentLocation?.fullAddress
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()),
       );
     }
     if (statusFilter) {
@@ -120,16 +122,21 @@ const PropertyTable = ({ refreshTrigger }) => {
         {/* Table */}
         {(isLoading || filteredProperties.length > 0) && !error && (
           <div className="overflow-x-auto">
-            <table className="w-full text-left min-w-[800px]">
+            <table className="w-full text-left min-w-[640px]">
               <thead className="bg-base-200 border-b border-base-300 text-xs font-semibold text-base-content/60">
                 <tr>
                   <th className="px-6 py-4 uppercase">Property</th>
-                  <th className="px-6 py-4 uppercase">Type</th>
+                  <th className="px-6 py-4 uppercase hidden md:table-cell">
+                    Category
+                  </th>
+                  <th className="px-6 py-4 uppercase hidden md:table-cell">
+                    Type
+                  </th>
                   <th className="px-6 py-4 uppercase">Status</th>
-                  <th className="px-6 py-4 uppercase whitespace-nowrap">
+                  <th className="px-6 py-4 uppercase whitespace-nowrap hidden lg:table-cell">
                     Market Rent
                   </th>
-                  <th className="px-6 py-4 uppercase whitespace-nowrap">
+                  <th className="px-6 py-4 uppercase whitespace-nowrap hidden lg:table-cell">
                     Tenant Name
                   </th>
                   <th className="px-6 py-4 uppercase text-center">Action</th>
