@@ -33,7 +33,7 @@ const featureListingData = [
   },
   {
     id: 4,
-    tag: "1 Bedroom",
+    tag: "Condo",
     title: "1BR Condo at Makati CBD",
     location: "Salcedo Village, Makati City",
     price: "₱30,000",
