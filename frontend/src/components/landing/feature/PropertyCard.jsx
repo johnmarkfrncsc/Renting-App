@@ -1,20 +1,12 @@
-const PropertyCard = ({
-  tag,
-  title,
-  location,
-  price,
-  status,
-  gradientClass,
-  icon: Icon,
-}) => {
+const PropertyCard = ({ tag, title, location, price, status, image }) => {
   return (
     <div className="bg-base-200 border border-base-300/70 rounded-xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-base-300">
       {/* Image placeholder */}
-      <div
-        className={`h-40 w-full flex items-center justify-center ${gradientClass}`}
-      >
-        {Icon && <Icon className="w-10 h-10 text-primary" />}
-      </div>
+      <img
+        src={image}
+        alt={title}
+        className="w-full h-40 object-cover rounded-lg"
+      />
 
       {/* Card body */}
       <div className="px-4 pt-3 pb-4 flex flex-col">

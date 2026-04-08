@@ -1,4 +1,7 @@
-import { Building2, Home, House, BedDouble } from "lucide-react";
+import condo1 from "../../../assets/condo1.jpg";
+import condo2 from "../../../assets/condo2.jpg";
+import house1 from "../../../assets/house1.jpg";
+import studio1 from "../../../assets/studio1.jpg";
 
 const featureListingData = [
   {
@@ -8,8 +11,7 @@ const featureListingData = [
     location: "Bonifacio Global City, Taguig",
     price: "₱55,000",
     status: "available",
-    gradientClass: "bg-gradient-to-br from-primary/10 to-primary/30",
-    icon: Building2,
+    image: condo1,
   },
   {
     id: 2,
@@ -18,8 +20,7 @@ const featureListingData = [
     location: "Quezon City, Metro Manila",
     price: "₱18,000",
     status: "available",
-    gradientClass: "bg-gradient-to-br from-base-200 to-base-300",
-    icon: BedDouble,
+    image: studio1,
   },
   {
     id: 3,
@@ -28,8 +29,7 @@ const featureListingData = [
     location: "Muntinlupa City, Metro Manila",
     price: "₱70,000",
     status: "available",
-    gradientClass: "bg-gradient-to-br from-warning/10 to-warning/30",
-    icon: House,
+    image: house1,
   },
   {
     id: 4,
@@ -38,8 +38,7 @@ const featureListingData = [
     location: "Salcedo Village, Makati City",
     price: "₱30,000",
     status: "coming-soon",
-    gradientClass: "bg-gradient-to-br from-error/10 to-error/30",
-    icon: Home,
+    image: condo2,
   },
 ];
 
