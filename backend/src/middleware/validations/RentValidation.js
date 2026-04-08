@@ -1,161 +1,174 @@
 const ValidateRent = (req, res, next) => {
   try {
-    const fieldRequired = [
-      "rentTitle",
-      "rentDescription",
-      "rentAddress",
-      "rentCategory",
-      "rentStatus",
-      "rentTenant",
-      "rentPrice",
-      "rentImageURL",
-    ];
-    const fieldTypes = {
-      rentTitle: String,
-      rentDescription: String,
-      rentCategory: String,
-      rentStatus: String,
-      rentTenant: String,
-      rentAddress: String,
-      rentImageURL: String,
-      rentPrice: Number,
-    };
-    const fieldLengths = {
-      rentTitle: { min: 10, max: 60 },
-      // rentDescription: { min: 50, max: 250 },
+    const {
+      rentTitle,
+      rentDescription,
+      rentCategory,
+      rentType,
+      rentPrice,
+      rentStatus,
+      rentDetails,
+      rentLocation,
+      rentImages,
+    } = req.body;
 
-      rentAddress: { min: 20, max: 70 },
-      rentImageURL: String,
-      rentPrice: { min: 2000, max: 30000 },
-    };
+    // Required string fields
+    const requiredStrings = { rentTitle, rentDescription };
 
-    const validCategories = [
-      "house",
-      "unit 1br",
-      "unit 2br",
-      "unit penthouse",
-      "room",
-      "dorm",
-    ];
-
-    const validStatus = ["occupied", "vacant", "under renovation"];
-    //4th try
-    for (let i = 0; i < fieldRequired.length; i++) {
-      // store to looped requiredFields in 'fields'
-      const fieldName = fieldRequired[i];
-      //expectedType = looked in to fieldTypes {object} and find the type assigned to this 'fields'
-      const expectedType = fieldTypes[fieldName];
-      const lengthRules = fieldLengths[fieldName];
-      const value = req.body[fieldName];
-
-      //if exist
-      if (value === undefined) {
-        return res
-          .status(400)
-          .json({ message: `${fieldName} can't be empty field` });
+    for (const [fieldName, value] of Object.entries(requiredStrings)) {
+      if (!value || typeof value !== "string" || value.trim() === "") {
+        return res.status(400).json({
+          success: false,
+          message: `${fieldName} is required and must be a non-empty string`,
+        });
       }
+    }
 
-      //Validate Type string
+    // rentTitle specific rules
+    const trimmedTitle = rentTitle.trim();
 
-      if (expectedType === String) {
-        if (typeof value !== "string") {
-          return res
-            .status(400)
-            .json({ message: "must input a string ex: abcd.." });
-        }
+    if (trimmedTitle.length < 10 || trimmedTitle.length > 60) {
+      return res.status(400).json({
+        success: false,
+        message: "rentTitle must be between 10 and 60 characters",
+      });
+    }
+    if (/^\d+$/.test(trimmedTitle)) {
+      return res.status(400).json({
+        success: false,
+        message: "rentTitle cannot be numbers only",
+      });
+    }
+    if (!/[a-zA-Z]/.test(trimmedTitle)) {
+      return res.status(400).json({
+        success: false,
+        message: "rentTitle must contain letters",
+      });
+    }
+    if (/^(.)\1+$/.test(trimmedTitle)) {
+      return res.status(400).json({
+        success: false,
+        message: "rentTitle cannot be a single repeated character",
+      });
+    }
+    if (/^(.{1,3})\1{2,}$/.test(trimmedTitle)) {
+      return res.status(400).json({
+        success: false,
+        message: "rentTitle cannot consist of repeating patterns",
+      });
+    }
 
-        const trimmedValue = value.trim(); //store the value that has been trim in trimmedValue
-        if (trimmedValue === "") {
-          return res.status(400).json({
-            message: `${fieldName} can't have empty string`,
-          });
-        }
-        if (fieldName === "rentTitle") {
-          // Reject if title is numbers only
-          if (/^\d+$/.test(trimmedValue)) {
-            return res.status(400).json({
-              message: `Title cannot be numbers only. Please provide a descriptive title.`,
-            });
-          }
+    // rentCategory
+    const validCategories = ["condo", "house", "apartment", "dorm"];
 
-          // Reject if title has no letters at all (e.g. "123 !!! 456")
-          if (!/[a-zA-Z]/.test(trimmedValue)) {
-            return res.status(400).json({
-              message: `Title must contain letters.`,
-            });
-          }
-          // Rejects "aaaaaaaaaa" - entire string is one repeated character
-          if (/^(.)\1+$/.test(trimmedValue)) {
-            return res.status(400).json({
-              message: "Title cannot consist of a single repeated character.",
-            });
-          }
-          // Rejects "ababababab", "abcabcabc" - repeating patterns
-          if (/^(.{1,3})\1{2,}$/.test(trimmedValue)) {
-            return res.status(400).json({
-              message: "Title cannot consist of repeating patterns.",
-            });
-          }
-        }
+    if (
+      !rentCategory ||
+      !validCategories.includes(rentCategory.toLowerCase())
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: `rentCategory must be one of: ${validCategories.join(", ")}`,
+      });
+    }
 
-        //Validate string length
-        if (lengthRules) {
-          if (trimmedValue.length < lengthRules.min) {
-            return res.status(400).json({
-              message: `${trimmedValue} too short, minimum lenght is  ${lengthRules.min}`,
-            });
-          } else if (trimmedValue.length > lengthRules.max) {
-            return res.status(400).json({
-              message: `${trimmedValue} too long, , max lenght is  ${lengthRules.max}`,
-            });
-          }
-        }
-        //Validation for allowed category list
-        if (fieldName === "rentCategory") {
-          if (!validCategories.includes(trimmedValue.toLowerCase())) {
-            return res.status(400).json({
-              message: `${trimmedValue} is not a valid category. Valid categories are: ${validCategories} `,
-            });
-          }
-        }
+    // rentType
+    const validTypes = ["studio", "1BR", "2BR", "3BR", "loft", "mezzanine"];
 
-        //Validation for allowed status list
-        if (fieldName === "rentStatus") {
-          const statusLower = trimmedValue.toLowerCase();
-          const validStatusLower = validStatus.map((s) => s.toLowerCase());
-          if (!validStatusLower.includes(statusLower)) {
-            return res.status(400).json({
-              message: `${trimmedValue} is not a valid status. Valid statuses are: ${validStatus.join(", ")} `,
-            });
-          }
-          req.body[fieldName] = statusLower;
-        } else {
-          req.body[fieldName] = trimmedValue.toLowerCase();
-        }
-      }
-      //Validate Type number
-      else if (expectedType === Number) {
-        if (isNaN(value)) {
-          return res.status(400).json({ message: "must input a number" });
-        }
+    if (!rentType || !validTypes.includes(rentType)) {
+      return res.status(400).json({
+        success: false,
+        message: `rentType must be one of: ${validTypes.join(", ")}`,
+      });
+    }
 
-        //Validate number range
-        if (value < lengthRules.min) {
-          return res.status(400).json({
-            message: `${value} is too low, minimum: ${lengthRules.min}`,
-          });
-        } else if (value > lengthRules.max) {
-          return res.status(400).json({
-            message: `${value} is too high, minimum: ${lengthRules.max}`,
-          });
-        }
-      }
+    // rentStatus
+    const validStatus = ["available", "occupied", "reserved"];
+
+    if (rentStatus && !validStatus.includes(rentStatus.toLowerCase())) {
+      return res.status(400).json({
+        success: false,
+        message: `rentStatus must be one of: ${validStatus.join(", ")}`,
+      });
+    }
+
+    // rentPrice
+    if (rentPrice === undefined || isNaN(rentPrice)) {
+      return res.status(400).json({
+        success: false,
+        message: "rentPrice is required and must be a number",
+      });
+    }
+    if (rentPrice < 2000 || rentPrice > 100000) {
+      return res.status(400).json({
+        success: false,
+        message: "rentPrice must be between 2000 and 100000",
+      });
+    }
+
+    // rentDetails
+    if (!rentDetails || typeof rentDetails !== "object") {
+      return res.status(400).json({
+        success: false,
+        message: "rentDetails is required",
+      });
+    }
+    if (!rentDetails.bedrooms || isNaN(rentDetails.bedrooms)) {
+      return res.status(400).json({
+        success: false,
+        message: "rentDetails.bedrooms is required and must be a number",
+      });
+    }
+    if (!rentDetails.bathrooms || isNaN(rentDetails.bathrooms)) {
+      return res.status(400).json({
+        success: false,
+        message: "rentDetails.bathrooms is required and must be a number",
+      });
+    }
+
+    //rentLocation
+    if (!rentLocation || typeof rentLocation !== "object") {
+      return res.status(400).json({
+        success: false,
+        message: "rentLocation is required",
+      });
+    }
+    if (
+      !rentLocation.fullAddress ||
+      typeof rentLocation.fullAddress !== "string" ||
+      rentLocation.fullAddress.trim().length < 10
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "rentLocation.fullAddress is required and must be at least 10 characters",
+      });
+    }
+    if (
+      !rentLocation.city ||
+      typeof rentLocation.city !== "string" ||
+      rentLocation.city.trim() === ""
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "rentLocation.city is required",
+      });
+    }
+
+    // rentImages
+    if (!rentImages || !Array.isArray(rentImages) || rentImages.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "rentImages must be a non-empty array of image URLs",
+      });
     }
 
     next();
   } catch (error) {
-    console.log("Error in validation");
-    res.status(500).json({ message: "Error in validation middleware" });
+    console.error("Error in ValidateRent middleware:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error in validation middleware",
+    });
   }
 };
 
