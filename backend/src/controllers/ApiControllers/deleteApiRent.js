@@ -2,16 +2,25 @@ import deleteApiRentService from "../../services/ApiServices/deleteApiRent.js";
 
 const deleteApiRent = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const result = await deleteApiRentService(id);
-
-    if (!result.success) {
-      return res.status(404).json({
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
         success: false,
-        message: "Rent not found",
+        message: "Only landlords can delete a listing",
       });
     }
+
+    const { id } = req.params;
+    const userId = req.user.id || req.user._id;
+
+    const result = await deleteApiRentService(id, userId);
+
+    if (!result.success) {
+      return res.status(result.status || 404).json({
+        success: false,
+        message: result.message || "Rent not found",
+      });
+    }
+
     return res.status(200).json({
       success: true,
       message: "Rent deleted successfully",
