@@ -8,7 +8,7 @@ const getApiRentById = async (req, res) => {
     if (!result.success) {
       return res.status(404).json({
         success: false,
-        message: "Rent not found",
+        message: result.message || "Rent not found",
       });
     }
     return res.status(200).json({

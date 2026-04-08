@@ -1,12 +1,13 @@
 import rentSchema from "../../model/RentSchema.js";
 
-const getApiRentbyId = async (id) => {
+const getApiRentById = async (id) => {
   try {
     const rent = await rentSchema.findById(id);
 
     if (!rent) {
       return {
         success: false,
+        message: "Rent not found",
         data: null,
       };
     }
@@ -17,9 +18,10 @@ const getApiRentbyId = async (id) => {
   } catch (error) {
     return {
       success: false,
+      message: error.message || "Error fetching rent",
       data: null,
     };
   }
 };
 
-export default getApiRentbyId;
+export default getApiRentById;
