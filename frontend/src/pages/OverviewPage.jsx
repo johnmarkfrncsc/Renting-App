@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Building2, CheckCircle, XCircle, DollarSign } from "lucide-react";
 
 import useOverviewData from "../components/hooks/useOverviewData.js";
-import getOverviewStats from "../utils/getOverviewStats.js";
+import getOverviewStats from "../components/utils/getOverviewStats.js";
 
 import StatsCard from "../components/cards/StatsCard.jsx";
 import OccupancyCard from "../components/cards/OccupancyCard.jsx";
