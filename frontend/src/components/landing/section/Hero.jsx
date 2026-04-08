@@ -17,7 +17,7 @@ const Hero = () => {
           <em className="text-primary not-italic font-serif">home</em>
         </h1>
 
-        <p className="fade-up d3 text-sm md:text-base font-light text-base-content/55 max-w-sm mx-auto mb-7 md:mb-9">
+        <p className="fade-up d3 text-sm md:text-base font-light text-base-content/60 max-w-sm mx-auto mb-7 md:mb-9">
           Discover apartments, condos, and houses for rent with transparent
           pricing and no hidden fees.
         </p>
