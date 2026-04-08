@@ -2,17 +2,15 @@ import { useState } from "react";
 import PropertyCard from "../feature/PropertyCard.jsx";
 import featureListingData from "../data/featureListingData.js";
 
-const filters = [
-  "All",
-  "Studio",
-  "1 Bedroom",
-  "2 Bedrooms",
-  "House",
-  "Pet-friendly",
-];
+const filters = ["All", "Studio", "Condo", "House", "Pet-friendly"];
 
 const FeaturedListings = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+
+  const filteredListings =
+    activeFilter === "All"
+      ? featureListingData
+      : featureListingData.filter((listing) => listing.tag === activeFilter);
 
   return (
     <div className="max-w-6xl mx-auto px-5 md:px-6 pb-16">
@@ -20,15 +18,9 @@ const FeaturedListings = () => {
         <h2 className="font-serif text-xl md:text-2xl tracking-tight">
           Featured listings
         </h2>
-        <a
-          href="#"
-          className="text-sm font-medium text-primary hover:underline"
-        >
-          See all →
-        </a>
       </div>
 
-      {/*filter pills */}
+      {/* filters */}
       <div className="flex gap-2 overflow-x-auto pb-1 mb-6">
         {filters.map((filter) => (
           <button
@@ -46,8 +38,9 @@ const FeaturedListings = () => {
         ))}
       </div>
 
+      {/* listings */}
       <div className="flex flex-wrap -mx-2">
-        {featureListingData.map((listing) => (
+        {filteredListings.map((listing) => (
           <div key={listing.id} className="w-full sm:w-1/2 lg:w-1/4 px-2 mb-4">
             <PropertyCard {...listing} />
           </div>
