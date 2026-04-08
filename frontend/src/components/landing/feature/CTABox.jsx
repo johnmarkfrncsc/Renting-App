@@ -35,7 +35,7 @@ const CTABox = () => {
 
         {showLearnMore && (
           <div
-            className="fixed inset-0 bg-transparent flex items-center justify-center z-50"
+            className="fixed inset-0 bg-transparent backdrop-blur-xs flex items-center justify-center z-50"
             onClick={() => setShowLearnMore(false)}
           >
             <div

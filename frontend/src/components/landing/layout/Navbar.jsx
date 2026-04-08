@@ -13,7 +13,7 @@ const Navbar = () => {
       <div className="h-[60px] flex items-center justify-between px-5 md:px-8">
         {/* Logo */}
         <div className="font-serif text-xl tracking-tight">
-          rent<span className="text-primary">ara</span>
+          Rent<span className="text-primary">ara</span>
         </div>
 
         {/* Desktop */}
