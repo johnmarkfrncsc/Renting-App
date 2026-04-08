@@ -19,22 +19,16 @@ const Navbar = () => {
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-6">
           <a
-            href="#"
-            className="text-[13.5px] text-base-content/55 hover:text-base-content transition-colors"
+            href="#listing"
+            className="text-[13.5px] text-base-content/55 font-medium hover:text-base-content transition-colors"
           >
             Browse
           </a>
           <a
-            href="#"
-            className="text-[13.5px] text-base-content/55 hover:text-base-content transition-colors"
+            href="#cta"
+            className="text-[13.5px] text-base-content/55 font-medium hover:text-base-content transition-colors"
           >
             How it works
-          </a>
-          <a
-            href="#"
-            className="text-[13.5px] text-base-content/55 hover:text-base-content transition-colors"
-          >
-            List your space
           </a>
 
           {/* Theme toggle */}

@@ -13,7 +13,7 @@ const FeaturedListings = () => {
       : featureListingData.filter((listing) => listing.tag === activeFilter);
 
   return (
-    <div className="max-w-6xl mx-auto px-5 md:px-6 pb-16">
+    <div id="listing" className="max-w-6xl mx-auto px-5 md:px-6 pb-16">
       <div className="flex items-baseline justify-between mb-5">
         <h2 className="font-serif text-xl md:text-2xl tracking-tight">
           Featured listings
