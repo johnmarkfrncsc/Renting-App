@@ -46,7 +46,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
       <div className="bg-base-100 w-full max-w-lg rounded-xl p-6 shadow-lg border border-base-300">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="font-semibold text-lg">Filters</h2>
+          <h2 className="font-semibold text-xl tracking-wide">Filters</h2>
           <button className="cursor-pointer" onClick={onClose}>
             <X />
           </button>
@@ -54,7 +54,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
 
         {/* Categories */}
         <div className="mb-4">
-          <p className="text-sm mb-2 font-medium">Categories</p>
+          <p className="text-sm mb-2 font-medium tracking-wide">Categories</p>
           <div className="flex flex-wrap gap-2">
             {categories.map((c) => (
               <button
@@ -70,7 +70,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
 
         {/* Types */}
         <div className="mb-4">
-          <p className="text-sm mb-2 font-medium">Type</p>
+          <p className="text-sm mb-2 font-medium tracking-wide">Type</p>
           <div className="flex flex-wrap gap-2">
             {types.map((t) => (
               <button
@@ -86,7 +86,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
 
         {/* Status */}
         <div className="mb-6">
-          <p className="text-sm mb-2 font-medium">Status</p>
+          <p className="text-sm mb-2 font-medium tracking-wide">Status</p>
           <div className="flex flex-wrap gap-2">
             {statuses.map((s) => (
               <button
