@@ -28,7 +28,10 @@ const PortfolioPage = () => {
         </div>
       </header>
 
-      <PropertyTable refreshTrigger={refreshTrigger} />
+      <PropertyTable
+        refreshTrigger={refreshTrigger}
+        onRefresh={() => setRefreshTrigger((prev) => prev + 1)}
+      />
     </div>
   );
 };
