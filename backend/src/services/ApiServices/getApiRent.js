@@ -7,11 +7,12 @@ const getApiRent = async (filters) => {
     const { rentCategory, rentType } = filters;
 
     if (rentCategory) {
-      query.rentCategory = rentCategory;
+      const categories = rentCategory.split(",");
+      query.rentCategory = { $in: categories };
     }
-
     if (rentType) {
-      query.rentType = rentType;
+      const types = rentType.split(",");
+      query.rentType = { $in: types };
     }
 
     const rents = await rentSchema.find(query).sort({ createdAt: -1 });

@@ -18,9 +18,9 @@ const PropertyTable = ({ refreshTrigger }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [appliedFilters, setAppliedFilters] = useState({
-    category: "",
-    type: "",
-    status: "",
+    category: [],
+    type: [],
+    status: [],
   });
 
   const [properties, setProperties] = useState([]);
@@ -53,10 +53,10 @@ const PropertyTable = ({ refreshTrigger }) => {
     try {
       const params = {};
 
-      if (appliedFilters.category)
-        params.rentCategory = appliedFilters.category;
-
-      if (appliedFilters.type) params.rentType = appliedFilters.type;
+      if (appliedFilters.category.length > 0)
+        params.rentCategory = appliedFilters.category.join(",");
+      if (appliedFilters.type.length > 0)
+        params.rentType = appliedFilters.type.join(",");
 
       const response = await api.get("/rents", { params });
 
@@ -101,7 +101,8 @@ const PropertyTable = ({ refreshTrigger }) => {
     if (appliedFilters.status) {
       result = result.filter(
         (p) =>
-          p.rentStatus.toLowerCase() === appliedFilters.status.toLowerCase(),
+          appliedFilters.status.length === 0 ||
+          appliedFilters.status.includes(p.rentStatus.toLowerCase()),
       );
     }
 
@@ -119,7 +120,9 @@ const PropertyTable = ({ refreshTrigger }) => {
   };
 
   const hasActiveFilters =
-    appliedFilters.category || appliedFilters.type || appliedFilters.status;
+    appliedFilters.category.length > 0 ||
+    appliedFilters.type.length > 0 ||
+    appliedFilters.status.length > 0;
 
   return (
     <>
