@@ -3,14 +3,14 @@ import { AlertCircle, Inbox } from "lucide-react";
 import api from "../../api/axios";
 import { AuthContext } from "../../context/AuthContext";
 import { useModal } from "../../components/hooks/useModal";
-import ViewPropertyModal from "../portfolio/ViewPropertyModal";
+import ViewPropertySidebar from "./ViewPropertySidebar";
 import DeleteConfirmModal from "../portfolio/DeleteConfirmModal";
 import TableSkeleton from "../portfolio/TableSkeleton";
 import PropertyFilters from "../portfolio/PropertyFilters";
 import PropertyRow from "../portfolio/PropertyRow";
 import FilterModal from "../portfolio/FilterModal";
 
-const PropertyTable = ({ refreshTrigger }) => {
+const PropertyTable = ({ refreshTrigger, onRefresh }) => {
   const { user } = useContext(AuthContext);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -83,7 +83,7 @@ const PropertyTable = ({ refreshTrigger }) => {
 
   useEffect(() => {
     fetchUserProperties();
-  }, [appliedFilters, selectedProperty, refreshTrigger]);
+  }, [appliedFilters, refreshTrigger]);
 
   useEffect(() => {
     let result = properties;
@@ -222,14 +222,14 @@ const PropertyTable = ({ refreshTrigger }) => {
       </div>
 
       {selectedProperty && (
-        <ViewPropertyModal
+        <ViewPropertySidebar
           isOpen={isViewModalOpen}
           onClose={() => {
             closeViewModal();
             setSelectedProperty(null);
           }}
           property={selectedProperty}
-          onUpdate={fetchUserProperties}
+          onUpdate={onRefresh}
         />
       )}
 
@@ -241,7 +241,7 @@ const PropertyTable = ({ refreshTrigger }) => {
             setPropertyToDelete(null);
           }}
           property={propertyToDelete}
-          onDelete={fetchUserProperties}
+          onDelete={onRefresh}
         />
       )}
     </>
