@@ -8,15 +8,26 @@ import DeleteConfirmModal from "../portfolio/DeleteConfirmModal";
 import TableSkeleton from "../portfolio/TableSkeleton";
 import PropertyFilters from "../portfolio/PropertyFilters";
 import PropertyRow from "../portfolio/PropertyRow";
+import FilterModal from "../portfolio/FilterModal";
 
 const PropertyTable = ({ refreshTrigger }) => {
   const { user } = useContext(AuthContext);
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+
+  const [appliedFilters, setAppliedFilters] = useState({
+    category: "",
+    type: "",
+    status: "",
+  });
+
   const [properties, setProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
   const [propertyToDelete, setPropertyToDelete] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -26,6 +37,7 @@ const PropertyTable = ({ refreshTrigger }) => {
     openModal: openViewModal,
     closeModal: closeViewModal,
   } = useModal();
+
   const {
     isModalOpen: isDeleteModalOpen,
     openModal: openDeleteModal,
@@ -34,14 +46,25 @@ const PropertyTable = ({ refreshTrigger }) => {
 
   const fetchUserProperties = async () => {
     if (!user?.id) return;
+
     setIsLoading(true);
     setError("");
+
     try {
-      const response = await api.get("/rents");
+      const params = {};
+
+      if (appliedFilters.category)
+        params.rentCategory = appliedFilters.category;
+
+      if (appliedFilters.type) params.rentType = appliedFilters.type;
+
+      const response = await api.get("/rents", { params });
+
       if (response.data.success) {
         const userProperties = response.data.data.filter(
           (property) => property.userId === user.id,
         );
+
         setProperties(userProperties);
         setFilteredProperties(userProperties);
       } else {
@@ -60,10 +83,11 @@ const PropertyTable = ({ refreshTrigger }) => {
 
   useEffect(() => {
     fetchUserProperties();
-  }, [selectedProperty, refreshTrigger]);
+  }, [appliedFilters, selectedProperty, refreshTrigger]);
 
   useEffect(() => {
     let result = properties;
+
     if (searchTerm.trim()) {
       result = result.filter(
         (p) =>
@@ -73,13 +97,16 @@ const PropertyTable = ({ refreshTrigger }) => {
             .includes(searchTerm.toLowerCase()),
       );
     }
-    if (statusFilter) {
+
+    if (appliedFilters.status) {
       result = result.filter(
-        (p) => p.rentStatus.toLowerCase() === statusFilter.toLowerCase(),
+        (p) =>
+          p.rentStatus.toLowerCase() === appliedFilters.status.toLowerCase(),
       );
     }
+
     setFilteredProperties(result);
-  }, [searchTerm, statusFilter, properties]);
+  }, [searchTerm, appliedFilters.status, properties]);
 
   useEffect(() => {
     const handleClickOutside = () => setOpenMenuId(null);
@@ -91,13 +118,25 @@ const PropertyTable = ({ refreshTrigger }) => {
     setOpenMenuId((prev) => (prev === propertyId ? null : propertyId));
   };
 
+  const hasActiveFilters =
+    appliedFilters.category || appliedFilters.type || appliedFilters.status;
+
   return (
     <>
       <PropertyFilters
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
-        statusFilter={statusFilter}
-        onStatusChange={setStatusFilter}
+        onOpenFilters={() => setIsFilterOpen(true)}
+        hasActiveFilters={hasActiveFilters}
+      />
+
+      <FilterModal
+        isOpen={isFilterOpen}
+        currentFilters={appliedFilters}
+        onClose={() => setIsFilterOpen(false)}
+        onApply={({ category, type, status }) => {
+          setAppliedFilters({ category, type, status });
+        }}
       />
 
       <div className="bg-base-100 border border-base-300 rounded-xl overflow-hidden shadow-sm">
@@ -108,7 +147,6 @@ const PropertyTable = ({ refreshTrigger }) => {
           </div>
         )}
 
-        {/* Empty state */}
         {!isLoading && filteredProperties.length === 0 && !error && (
           <div className="flex flex-col items-center justify-center p-8 text-base-content/50">
             <Inbox className="h-10 w-20" />
@@ -119,7 +157,6 @@ const PropertyTable = ({ refreshTrigger }) => {
           </div>
         )}
 
-        {/* Table */}
         {(isLoading || filteredProperties.length > 0) && !error && (
           <div className="overflow-x-auto">
             <table className="w-full text-left min-w-[640px]">
@@ -142,6 +179,7 @@ const PropertyTable = ({ refreshTrigger }) => {
                   <th className="px-6 py-4 uppercase text-center">Action</th>
                 </tr>
               </thead>
+
               <tbody className="divide-y divide-base-300 text-sm">
                 {isLoading ? (
                   <TableSkeleton />
