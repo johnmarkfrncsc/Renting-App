@@ -2,20 +2,20 @@ import {
   CloudUpload,
   X,
   Car,
-  Waves,
   Dumbbell,
   PawPrint,
   Wifi,
-  ShieldCheck,
+  WavesLadder,
+  Cctv,
 } from "lucide-react";
 
 const iconMap = {
   parking: Car,
-  pool: Waves,
+  pool: WavesLadder,
   gym: Dumbbell,
   petsAllowed: PawPrint,
   wifi: Wifi,
-  security: ShieldCheck,
+  security: Cctv,
 };
 
 const inputClass =

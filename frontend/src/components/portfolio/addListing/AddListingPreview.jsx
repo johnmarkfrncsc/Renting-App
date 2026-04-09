@@ -1,9 +1,29 @@
-import { BedDouble, Bath, Ruler, Building } from "lucide-react";
+import {
+  BedDouble,
+  Bath,
+  Ruler,
+  Building,
+  Car,
+  Dumbbell,
+  PawPrint,
+  Wifi,
+  WavesLadder,
+  Cctv,
+} from "lucide-react";
 
 const statusColor = {
   available: "bg-success text-base-100",
   occupied: "bg-error text-base-100",
   reserved: "bg-warning text-base-100",
+};
+
+const amenityIcons = {
+  parking: Car,
+  pool: WavesLadder,
+  gym: Dumbbell,
+  petsAllowed: PawPrint,
+  wifi: Wifi,
+  security: Cctv,
 };
 
 const AddListingPreview = ({ preview }) => {
@@ -81,14 +101,18 @@ const AddListingPreview = ({ preview }) => {
           {/* Amenities */}
           {preview.amenities.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {preview.amenities.map((a) => (
-                <span
-                  key={a}
-                  className="text-xs px-2 py-0.5 bg-base-200 rounded-full capitalize"
-                >
-                  {a}
-                </span>
-              ))}
+              {preview.amenities.map((a) => {
+                const Icon = amenityIcons[a];
+                return (
+                  <span
+                    key={a}
+                    className="flex items-center gap-1 text-xs px-3 py-0.5 bg-base-300/80 rounded-full capitalize"
+                  >
+                    {Icon && <Icon size={11} />}
+                    {a === "petsAllowed" ? "Pets" : a}
+                  </span>
+                );
+              })}
             </div>
           )}
 
