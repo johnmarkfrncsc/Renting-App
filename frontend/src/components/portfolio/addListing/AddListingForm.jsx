@@ -89,9 +89,11 @@ const AddListingForm = ({
               onChange={handleInput}
               className={inputClass}
             >
-              <option value="">Select category</option>
+              <option value="" className="bg-base-300">
+                Select category
+              </option>
               {categoryOptions.map((c) => (
-                <option key={c} value={c}>
+                <option key={c} value={c} className="bg-base-300">
                   {c}
                 </option>
               ))}
@@ -107,9 +109,11 @@ const AddListingForm = ({
               onChange={handleInput}
               className={inputClass}
             >
-              <option value="">Select type</option>
+              <option value="" className="bg-base-300">
+                Select type
+              </option>
               {typeOptions.map((t) => (
-                <option key={t} value={t}>
+                <option key={t} value={t} className="bg-base-300">
                   {t}
                 </option>
               ))}
@@ -279,7 +283,7 @@ const AddListingForm = ({
               className={inputClass}
             >
               {statusOptions.map((s) => (
-                <option key={s} value={s}>
+                <option key={s} value={s} className="bg-base-300">
                   {s}
                 </option>
               ))}
