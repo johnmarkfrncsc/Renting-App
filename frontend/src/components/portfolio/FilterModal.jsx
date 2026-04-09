@@ -43,7 +43,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
 
   return (
     <div className="fixed inset-0 bg-base-100/40 flex items-center justify-center z-50">
-      <div className="bg-base-100 w-full max-w-lg rounded-xl p-6 shadow-lg border border-base-300">
+      <div className="bg-base-200 w-full max-w-lg rounded-xl p-6 shadow-lg border border-base-300">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="font-semibold text-xl tracking-wide">Filters</h2>
