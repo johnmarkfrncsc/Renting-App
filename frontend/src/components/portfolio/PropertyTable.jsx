@@ -119,6 +119,13 @@ const PropertyTable = ({ refreshTrigger }) => {
     setOpenMenuId((prev) => (prev === propertyId ? null : propertyId));
   };
 
+  const handleRemoveFilter = (filterType, value) => {
+    setAppliedFilters((prev) => ({
+      ...prev,
+      [filterType]: prev[filterType].filter((v) => v !== value),
+    }));
+  };
+
   const hasActiveFilters =
     appliedFilters.category.length > 0 ||
     appliedFilters.type.length > 0 ||
@@ -131,6 +138,8 @@ const PropertyTable = ({ refreshTrigger }) => {
         onSearch={setSearchTerm}
         onOpenFilters={() => setIsFilterOpen(true)}
         hasActiveFilters={hasActiveFilters}
+        appliedFilters={appliedFilters}
+        onRemoveFilter={handleRemoveFilter}
       />
 
       <FilterModal
