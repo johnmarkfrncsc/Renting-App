@@ -39,7 +39,8 @@ const PropertyRow = ({
               {property.rentTitle}
             </span>
             <span className="text-xs text-base-content/60 truncate">
-              {property.rentLocation?.fullAddress}
+              {property.rentLocation?.district}
+              {property.rentLocation?.city && `, ${property.rentLocation.city}`}
             </span>
           </div>
         </div>
