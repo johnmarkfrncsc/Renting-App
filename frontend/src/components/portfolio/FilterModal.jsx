@@ -6,9 +6,9 @@ const types = ["", "studio", "1BR", "2BR", "3BR", "loft", "mezzanine"];
 const statuses = ["", "available", "reserved", "occupied"];
 
 const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
-  const [category, setCategory] = useState("");
-  const [type, setType] = useState("");
-  const [status, setStatus] = useState("");
+  const [category, setCategory] = useState([]);
+  const [type, setType] = useState([]);
+  const [status, setStatus] = useState([]);
 
   useEffect(() => {
     if (isOpen) {
@@ -20,16 +20,30 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
 
   if (!isOpen) return null;
 
+  const toggle = (value, current, setter) => {
+    if (value === "") {
+      setter([]);
+    } else if (current.includes(value)) {
+      setter(current.filter((v) => v !== value));
+    } else {
+      setter([...current, value]);
+    }
+  };
+
   const pillClass = (value, selected) =>
-    `px-3 py-1 rounded-full border text-sm cursor-pointer transition ${
-      selected === value
-        ? "bg-primary text-primary-content border-primary"
-        : "border-base-300 text-base-content/60 hover:bg-base-200"
+    `px-3 py-1 rounded-full border text-sm cursor-pointer transition capitalize ${
+      value === ""
+        ? selected.length === 0
+          ? "bg-primary/20 text-primary border-primary"
+          : "border-base-300 text-base-content hover:bg-base-200"
+        : selected.includes(value)
+          ? "bg-primary/20 text-primary border-primary"
+          : "border-base-300 text-base-content hover:bg-base-200"
     }`;
 
   return (
     <div className="fixed inset-0 bg-base-100/40 flex items-center justify-center z-50">
-      <div className="bg-base-100 w-full max-w-lg rounded-xl p-6 shadow-lg">
+      <div className="bg-base-100 w-full max-w-lg rounded-xl p-6 shadow-lg border border-base-300">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="font-semibold text-lg">Filters</h2>
@@ -45,7 +59,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
             {categories.map((c) => (
               <button
                 key={c}
-                onClick={() => setCategory(c)}
+                onClick={() => toggle(c, category, setCategory)}
                 className={pillClass(c, category)}
               >
                 {c || "All"}
@@ -61,7 +75,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
             {types.map((t) => (
               <button
                 key={t}
-                onClick={() => setType(t)}
+                onClick={() => toggle(t, type, setType)}
                 className={pillClass(t, type)}
               >
                 {t || "All"}
@@ -77,7 +91,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
             {statuses.map((s) => (
               <button
                 key={s}
-                onClick={() => setStatus(s)}
+                onClick={() => toggle(s, status, setStatus)}
                 className={pillClass(s, status)}
               >
                 {s || "All"}
@@ -91,9 +105,9 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
           {/* Reset */}
           <button
             onClick={() => {
-              setCategory("");
-              setType("");
-              setStatus("");
+              setCategory([]);
+              setType([]);
+              setStatus([]);
             }}
             className="text-xs text-base-content/60 hover:text-base-content cursor-pointer"
           >
