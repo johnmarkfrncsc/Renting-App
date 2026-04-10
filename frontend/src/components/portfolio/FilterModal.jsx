@@ -42,104 +42,130 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
     }`;
 
   return (
-    <div className="fixed inset-0 bg-base-100/40 flex items-center justify-center z-50">
-      <div className="bg-base-200 w-full max-w-lg rounded-xl p-6 shadow-lg border border-base-300">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="font-semibold text-xl tracking-wide">Filters</h2>
-          <button className="cursor-pointer" onClick={onClose}>
-            <X />
-          </button>
-        </div>
-
-        {/* Categories */}
-        <div className="mb-4">
-          <p className="text-sm mb-2 font-medium tracking-wide">Categories</p>
-          <div className="flex flex-wrap gap-2">
-            {categories.map((c) => (
-              <button
-                key={c}
-                onClick={() => toggle(c, category, setCategory)}
-                className={pillClass(c, category)}
-              >
-                {c || "All"}
-              </button>
-            ))}
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+        onClick={onClose}
+      />
+      <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
+        <div
+          className="bg-base-200 w-full md:max-w-lg rounded-t-2xl md:rounded-xl shadow-lg border border-base-300 max-h-[85vh] flex flex-col"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex justify-center pt-3 pb-1 md:hidden">
+            <div className="w-10 h-1 rounded-full bg-base-content/20" />
           </div>
-        </div>
 
-        {/* Types */}
-        <div className="mb-4">
-          <p className="text-sm mb-2 font-medium tracking-wide">Type</p>
-          <div className="flex flex-wrap gap-2">
-            {types.map((t) => (
-              <button
-                key={t}
-                onClick={() => toggle(t, type, setType)}
-                className={pillClass(t, type)}
-              >
-                {t || "All"}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Status */}
-        <div className="mb-6">
-          <p className="text-sm mb-2 font-medium tracking-wide">Status</p>
-          <div className="flex flex-wrap gap-2">
-            {statuses.map((s) => (
-              <button
-                key={s}
-                onClick={() => toggle(s, status, setStatus)}
-                className={pillClass(s, status)}
-              >
-                {s || "All"}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex justify-between items-center">
-          {/* Reset */}
-          <button
-            onClick={() => {
-              setCategory([]);
-              setType([]);
-              setStatus([]);
-            }}
-            className="text-xs text-base-content/60 hover:text-base-content cursor-pointer"
-          >
-            Reset all
-          </button>
-
-          <div className="flex gap-3">
+          {/* Header */}
+          <div className="flex justify-between items-center px-6 pt-4 pb-3 md:pt-6">
+            <h2 className="font-semibold text-xl tracking-wide">Filters</h2>
             <button
-              onClick={() => {
-                setCategory(currentFilters.category);
-                setType(currentFilters.type);
-                setStatus(currentFilters.status);
-                onClose();
-              }}
-              className="px-4 py-2 text-sm font-medium rounded-lg border-2 border-base-300 cursor-pointer hover:bg-base-300"
+              type="button"
+              className="cursor-pointer hidden md:block"
+              onClick={onClose}
             >
-              Cancel
+              <X />
+            </button>
+          </div>
+
+          <div className="overflow-y-auto px-6 pb-4 flex flex-col gap-4">
+            {/* Categories */}
+            <div>
+              <p className="text-sm mb-2 font-medium tracking-wide">
+                Categories
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => toggle(c, category, setCategory)}
+                    className={pillClass(c, category)}
+                  >
+                    {c || "All"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Types */}
+            <div>
+              <p className="text-sm mb-2 font-medium tracking-wide">Type</p>
+              <div className="flex flex-wrap gap-2">
+                {types.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => toggle(t, type, setType)}
+                    className={pillClass(t, type)}
+                  >
+                    {t || "All"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Status */}
+            <div>
+              <p className="text-sm mb-2 font-medium tracking-wide">Status</p>
+              <div className="flex flex-wrap gap-2">
+                {statuses.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => toggle(s, status, setStatus)}
+                    className={pillClass(s, status)}
+                  >
+                    {s || "All"}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Actions — sticky at bottom */}
+          <div className="shrink-0 flex justify-between items-center px-6 py-4 border-t border-base-300">
+            <button
+              type="button"
+              onClick={() => {
+                setCategory([]);
+                setType([]);
+                setStatus([]);
+              }}
+              className="text-xs text-base-content/60 hover:text-base-content cursor-pointer"
+            >
+              Reset all
             </button>
 
-            <button
-              onClick={() => {
-                onApply({ category, type, status });
-                onClose();
-              }}
-              className="px-4 py-2 text-sm font-medium rounded-lg border-2 border-primary/20 bg-primary/80 text-primary-content cursor-pointer hover:bg-primary"
-            >
-              Apply
-            </button>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setCategory(currentFilters.category);
+                  setType(currentFilters.type);
+                  setStatus(currentFilters.status);
+                  onClose();
+                }}
+                className="px-4 py-2 text-sm font-medium rounded-lg border-2 border-base-300 cursor-pointer hover:bg-base-300"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onApply({ category, type, status });
+                  onClose();
+                }}
+                className="px-4 py-2 text-sm font-medium rounded-lg border-2 border-primary/20 bg-primary/80 text-primary-content cursor-pointer hover:bg-primary"
+              >
+                Apply
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
