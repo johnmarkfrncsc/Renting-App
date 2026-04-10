@@ -35,10 +35,10 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
       value === ""
         ? selected.length === 0
           ? "bg-primary/20 text-base-content border-primary"
-          : "border-base-400 text-base-content hover:bg-base-200"
+          : "border-base-400 text-base-content hover:bg-base-300"
         : selected.includes(value)
           ? "bg-primary/20 text-base-content border-primary"
-          : "border-base-400 text-base-content hover:bg-base-200"
+          : "border-base-400 text-base-content hover:bg-base-300"
     }`;
 
   return (
@@ -122,7 +122,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
                 setStatus(currentFilters.status);
                 onClose();
               }}
-              className="px-4 py-2 text-sm rounded-lg border border-base-300"
+              className="px-4 py-2 text-sm font-medium rounded-lg border-2 border-base-300 cursor-pointer hover:bg-base-300"
             >
               Cancel
             </button>
@@ -132,7 +132,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
                 onApply({ category, type, status });
                 onClose();
               }}
-              className="px-4 py-2 text-sm rounded-lg bg-primary text-primary-content"
+              className="px-4 py-2 text-sm font-medium rounded-lg border-2 border-primary/20 bg-primary/80 text-primary-content cursor-pointer hover:bg-primary"
             >
               Apply
             </button>
