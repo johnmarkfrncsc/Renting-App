@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 
 const categories = ["", "condo", "house", "apartment", "dorm"];
@@ -10,6 +10,10 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
   const [type, setType] = useState([]);
   const [status, setStatus] = useState([]);
 
+  const dragStartY = useRef(0);
+  const dragCurrentY = useRef(0);
+  const sheetRef = useRef();
+
   useEffect(() => {
     if (isOpen) {
       setCategory(currentFilters.category);
@@ -19,6 +23,39 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
   }, [isOpen, currentFilters]);
 
   if (!isOpen) return null;
+
+  const handleDragStart = (e) => {
+    dragStartY.current = e.touches[0].clientY;
+    dragCurrentY.current = 0;
+
+    if (sheetRef) {
+      sheetRef.current.style.transition = "none";
+    }
+  };
+
+  const handleDragMove = (e) => {
+    const delta = e.touches[0].clientY - dragStartY.current;
+
+    if (delta < 0) {
+      dragCurrentY.current = delta;
+    }
+    if (sheetRef.current) {
+      sheetRef.current.style.transform = `translateY(${delta}px)`;
+    }
+  };
+
+  const handleDragEnd = () => {
+    if (sheetRef.current) {
+      sheetRef.current.style.transition = "transform 0.3s ease";
+    }
+    if (dragCurrentY.current > 100) {
+      onClose();
+    } else {
+      if (sheetRef.current) {
+        sheetRef.current.style.transform = "translateY(0)";
+      }
+    }
+  };
 
   const toggle = (value, current, setter) => {
     if (value === "") {
@@ -48,13 +85,20 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
         className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
         onClick={onClose}
       />
+
       <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
         <div
+          ref={sheetRef}
           className="bg-base-200 w-full md:max-w-lg rounded-t-2xl md:rounded-xl shadow-lg border border-base-300 max-h-[85vh] flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex justify-center pt-3 pb-1 md:hidden">
-            <div className="w-10 h-1 rounded-full bg-base-content/20" />
+          <div
+            className="flex justify-center pt-3 pb-1 md:hidden touch-none"
+            onTouchStart={handleDragStart}
+            onTouchMove={handleDragMove}
+            onTouchEnd={handleDragEnd}
+          >
+            <div className="w-10 h-1.5 rounded-full bg-base-content/30 active:bg-base-content/50" />
           </div>
 
           {/* Header */}
@@ -124,7 +168,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
             </div>
           </div>
 
-          {/* Actions — sticky at bottom */}
+          {/* Actions */}
           <div className="shrink-0 flex justify-between items-center px-6 py-4 border-t border-base-300">
             <button
               type="button"
@@ -137,7 +181,6 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
             >
               Reset all
             </button>
-
             <div className="flex gap-3">
               <button
                 type="button"
