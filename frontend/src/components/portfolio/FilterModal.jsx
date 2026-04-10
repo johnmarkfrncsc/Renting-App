@@ -10,26 +10,34 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
   const [type, setType] = useState([]);
   const [status, setStatus] = useState([]);
 
-  const [isClosing, setIsClosing] = useState(false);
   const dragStartY = useRef(0);
   const dragCurrentY = useRef(0);
   const sheetRef = useRef();
+  const lastY = useRef(0);
+  const lastTime = useRef(0);
 
   useEffect(() => {
     if (isOpen) {
-      setIsClosing(false);
       setCategory(currentFilters.category);
       setType(currentFilters.type);
       setStatus(currentFilters.status);
+
+      if (sheetRef.current) {
+        sheetRef.current.style.transform = "translateY(0)";
+      }
     }
   }, [isOpen, currentFilters]);
 
   if (!isOpen) return null;
 
   const handleClose = () => {
-    setIsClosing(true);
+    if (!sheetRef.current) return;
+
+    sheetRef.current.style.transition =
+      "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)";
+    sheetRef.current.style.transform = "translateY(100%)";
+
     setTimeout(() => {
-      setIsClosing(false);
       onClose();
     }, 300);
   };
@@ -40,33 +48,47 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
     if (sheetRef.current) {
       sheetRef.current.style.transition = "none";
     }
+    lastY.current = e.touches[0].clientY;
+    lastTime.current = Date.now();
   };
 
   const handleDragMove = (e) => {
-    const delta = e.touches[0].clientY - dragStartY.current;
+    const currentY = e.touches[0].clientY;
+    const now = Date.now();
+
+    const delta = currentY - dragStartY.current;
     if (delta <= 0) return;
+
     dragCurrentY.current = delta;
-    if (sheetRef.current) {
-      sheetRef.current.style.transform = `translateY(${delta}px)`;
-    }
+
+    const dy = currentY - lastY.current;
+    const dt = now - lastTime.current;
+    const velocity = dy / dt;
+
+    lastY.current = currentY;
+    lastTime.current = now;
+
+    sheetRef.current.dataset.velocity = velocity;
+
+    const resistance = delta * 0.85;
+
+    sheetRef.current.style.transform = `translateY(${resistance}px)`;
   };
 
   const handleDragEnd = () => {
-    if (sheetRef.current) {
-      sheetRef.current.style.transition = "transform 0.3s ease";
-    }
-    if (dragCurrentY.current > 100) {
-      if (sheetRef.current) {
-        sheetRef.current.style.transform = "translateY(100%)";
-      }
+    const velocity = parseFloat(sheetRef.current.dataset.velocity || "0");
+
+    sheetRef.current.style.transition =
+      "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)";
+
+    if (dragCurrentY.current > 120 || velocity > 0.5) {
+      sheetRef.current.style.transform = "translateY(100%)";
+
       setTimeout(() => {
-        setIsClosing(false);
         onClose();
       }, 300);
     } else {
-      if (sheetRef.current) {
-        sheetRef.current.style.transform = "translateY(0)";
-      }
+      sheetRef.current.style.transform = "translateY(0)";
     }
   };
 
@@ -91,24 +113,23 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
           : "border-base-400 text-base-content hover:bg-base-300"
     }`;
 
-  const sheetAnimationClass = isClosing
-    ? "animate-slide-down"
-    : "animate-slide-up";
-
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${
-          isClosing ? "opacity-0" : "opacity-100"
-        }`}
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-200"
+        style={{
+          opacity:
+            dragCurrentY.current > 0
+              ? 1 - Math.min(dragCurrentY.current / 300, 1)
+              : 1,
+        }}
         onClick={handleClose}
       />
 
       <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
         <div
           ref={sheetRef}
-          className={`bg-base-200 w-full md:max-w-lg rounded-t-2xl md:rounded-xl shadow-lg border border-base-300 max-h-[85vh] flex flex-col md:animate-none ${sheetAnimationClass}`}
-          onClick={(e) => e.stopPropagation()}
+          className={`bg-base-200 w-full md:max-w-lg rounded-t-2xl md:rounded-xl shadow-lg border border-base-300 max-h-[85vh] flex flex-col md:animate-none`}
         >
           <div
             className="flex justify-center pt-3 pb-1 md:hidden touch-none"
