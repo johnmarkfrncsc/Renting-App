@@ -25,11 +25,11 @@ const PropertyFilters = ({
         {/* Filter btn */}
         <button
           onClick={onOpenFilters}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition cursor-pointer whitespace-nowrap
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition cursor-pointer whitespace-nowrap shadow-md
             ${
               hasActiveFilters
                 ? "bg-primary text-primary-content border-primary"
-                : "bg-base-100 border-base-300 hover:bg-base-200 text-base-content"
+                : "bg-base-200 border-2 border-base-300 hover:bg-base-300 text-base-content"
             }
           `}
         >
