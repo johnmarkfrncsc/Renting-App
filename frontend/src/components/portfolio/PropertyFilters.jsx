@@ -44,12 +44,12 @@ const PropertyFilters = ({
           {appliedFilters.category.map((c) => (
             <span
               key={c}
-              className="flex items-center gap-1 pl-2 pr-0.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary capitalize"
+              className="flex items-center gap-1 pl-2 pr-0.5 py-1 rounded-full bg-primary/10 text-base-content text-xs font-medium border border-primary capitalize"
             >
               {c}
               <button
                 onClick={() => onRemoveFilter("category", c)}
-                className="hover:text-primary/60 cursor-pointer"
+                className="hover:text-base-content/60 cursor-pointer"
               >
                 <X className="h-3 w-4.5" />
               </button>
@@ -58,12 +58,12 @@ const PropertyFilters = ({
           {appliedFilters.type.map((t) => (
             <span
               key={t}
-              className="flex items-center gap-1 pl-2 pr-0.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary capitalize"
+              className="flex items-center gap-1 pl-2 pr-0.5 py-1 rounded-full bg-primary/10 text-base-content text-xs font-medium border border-primary capitalize"
             >
               {t}
               <button
                 onClick={() => onRemoveFilter("type", t)}
-                className="hover:text-primary/60 cursor-pointer"
+                className="hover:text-base-content/60 cursor-pointer"
               >
                 <X className="h-3 w-4.5" />
               </button>
@@ -72,12 +72,12 @@ const PropertyFilters = ({
           {appliedFilters.status.map((s) => (
             <span
               key={s}
-              className="flex items-center gap-1 pl-2 pr-0.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary capitalize"
+              className="flex items-center gap-1 pl-2 pr-0.5 py-1 rounded-full bg-primary/10 text-base-content text-xs font-medium border border-primary capitalize"
             >
               {s}
               <button
                 onClick={() => onRemoveFilter("status", s)}
-                className="hover:text-primary/60 cursor-pointer"
+                className="hover:text-base-content/60 cursor-pointer"
               >
                 <X className="h-3 w-4.5" />
               </button>
