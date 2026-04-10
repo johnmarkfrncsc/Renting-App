@@ -10,12 +10,14 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
   const [type, setType] = useState([]);
   const [status, setStatus] = useState([]);
 
+  const [isClosing, setIsClosing] = useState(false);
   const dragStartY = useRef(0);
   const dragCurrentY = useRef(0);
   const sheetRef = useRef();
 
   useEffect(() => {
     if (isOpen) {
+      setIsClosing(false);
       setCategory(currentFilters.category);
       setType(currentFilters.type);
       setStatus(currentFilters.status);
@@ -24,10 +26,17 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
 
   if (!isOpen) return null;
 
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 300);
+  };
+
   const handleDragStart = (e) => {
     dragStartY.current = e.touches[0].clientY;
     dragCurrentY.current = 0;
-
     if (sheetRef.current) {
       sheetRef.current.style.transition = "none";
     }
@@ -35,11 +44,8 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
 
   const handleDragMove = (e) => {
     const delta = e.touches[0].clientY - dragStartY.current;
-
     if (delta <= 0) return;
-
     dragCurrentY.current = delta;
-
     if (sheetRef.current) {
       sheetRef.current.style.transform = `translateY(${delta}px)`;
     }
@@ -49,9 +55,14 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
     if (sheetRef.current) {
       sheetRef.current.style.transition = "transform 0.3s ease";
     }
-
     if (dragCurrentY.current > 100) {
-      onClose();
+      if (sheetRef.current) {
+        sheetRef.current.style.transform = "translateY(100%)";
+      }
+      setTimeout(() => {
+        setIsClosing(false);
+        onClose();
+      }, 300);
     } else {
       if (sheetRef.current) {
         sheetRef.current.style.transform = "translateY(0)";
@@ -80,18 +91,23 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
           : "border-base-400 text-base-content hover:bg-base-300"
     }`;
 
+  const sheetAnimationClass = isClosing
+    ? "animate-slide-down"
+    : "animate-slide-up";
+
   return (
     <>
-      {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
-        onClick={onClose}
+        className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+          isClosing ? "opacity-0" : "opacity-100"
+        }`}
+        onClick={handleClose}
       />
 
       <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
         <div
           ref={sheetRef}
-          className="bg-base-200 w-full md:max-w-lg rounded-t-2xl md:rounded-xl shadow-lg border border-base-300 max-h-[85vh] flex flex-col"
+          className={`bg-base-200 w-full md:max-w-lg rounded-t-2xl md:rounded-xl shadow-lg border border-base-300 max-h-[85vh] flex flex-col md:animate-none ${sheetAnimationClass}`}
           onClick={(e) => e.stopPropagation()}
         >
           <div
@@ -109,14 +125,13 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
             <button
               type="button"
               className="cursor-pointer hidden md:block"
-              onClick={onClose}
+              onClick={handleClose}
             >
               <X />
             </button>
           </div>
 
           <div className="overflow-y-auto px-6 pb-4 flex flex-col gap-4">
-            {/* Categories */}
             <div>
               <p className="text-sm mb-2 font-medium tracking-wide">
                 Categories
@@ -134,8 +149,6 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
                 ))}
               </div>
             </div>
-
-            {/* Types */}
             <div>
               <p className="text-sm mb-2 font-medium tracking-wide">Type</p>
               <div className="flex flex-wrap gap-2">
@@ -151,8 +164,6 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
                 ))}
               </div>
             </div>
-
-            {/* Status */}
             <div>
               <p className="text-sm mb-2 font-medium tracking-wide">Status</p>
               <div className="flex flex-wrap gap-2">
@@ -190,7 +201,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
                   setCategory(currentFilters.category);
                   setType(currentFilters.type);
                   setStatus(currentFilters.status);
-                  onClose();
+                  handleClose();
                 }}
                 className="px-4 py-2 text-sm font-medium rounded-lg border-2 border-base-300 cursor-pointer hover:bg-base-300"
               >
@@ -200,7 +211,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
                 type="button"
                 onClick={() => {
                   onApply({ category, type, status });
-                  onClose();
+                  handleClose();
                 }}
                 className="px-4 py-2 text-sm font-medium rounded-lg border-2 border-primary/20 bg-primary/80 text-primary-content cursor-pointer hover:bg-primary"
               >
