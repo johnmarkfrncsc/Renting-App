@@ -28,7 +28,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
     dragStartY.current = e.touches[0].clientY;
     dragCurrentY.current = 0;
 
-    if (sheetRef) {
+    if (sheetRef.current) {
       sheetRef.current.style.transition = "none";
     }
   };
@@ -36,9 +36,10 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
   const handleDragMove = (e) => {
     const delta = e.touches[0].clientY - dragStartY.current;
 
-    if (delta < 0) {
-      dragCurrentY.current = delta;
-    }
+    if (delta <= 0) return;
+
+    dragCurrentY.current = delta;
+
     if (sheetRef.current) {
       sheetRef.current.style.transform = `translateY(${delta}px)`;
     }
@@ -48,6 +49,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
     if (sheetRef.current) {
       sheetRef.current.style.transition = "transform 0.3s ease";
     }
+
     if (dragCurrentY.current > 100) {
       onClose();
     } else {
