@@ -15,6 +15,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
   const sheetRef = useRef();
   const lastY = useRef(0);
   const lastTime = useRef(0);
+  const [dragY, setDragY] = useState(0);
 
   useEffect(() => {
     if (isOpen) {
@@ -53,6 +54,8 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
   };
 
   const handleDragMove = (e) => {
+    if (!sheetRef.current) return;
+
     const currentY = e.touches[0].clientY;
     const now = Date.now();
 
@@ -60,10 +63,11 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
     if (delta <= 0) return;
 
     dragCurrentY.current = delta;
+    setDragY(delta);
 
     const dy = currentY - lastY.current;
     const dt = now - lastTime.current;
-    const velocity = dy / dt;
+    const velocity = dt > 0 ? dy / dt : 0;
 
     lastY.current = currentY;
     lastTime.current = now;
@@ -76,7 +80,11 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
   };
 
   const handleDragEnd = () => {
+    if (!sheetRef.current) return;
+
     const velocity = parseFloat(sheetRef.current.dataset.velocity || "0");
+
+    setDragY(0);
 
     sheetRef.current.style.transition =
       "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)";
@@ -118,10 +126,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
       <div
         className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-200"
         style={{
-          opacity:
-            dragCurrentY.current > 0
-              ? 1 - Math.min(dragCurrentY.current / 300, 1)
-              : 1,
+          opacity: dragY > 0 ? 1 - Math.min(dragY / 300, 1) : 1,
         }}
         onClick={handleClose}
       />
