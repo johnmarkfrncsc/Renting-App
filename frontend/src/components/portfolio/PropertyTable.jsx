@@ -3,7 +3,7 @@ import { AlertCircle, Inbox } from "lucide-react";
 import api from "../../api/axios";
 import { AuthContext } from "../../context/AuthContext";
 import { useModal } from "../../components/hooks/useModal";
-import ViewPropertySidebar from "./ViewPropertySidebar";
+import ViewPropertySidebar from "../portfolio/viewProperty/ViewPropertySidebar";
 import DeleteConfirmModal from "../portfolio/DeleteConfirmModal";
 import TableSkeleton from "../portfolio/TableSkeleton";
 import PropertyFilters from "../portfolio/PropertyFilters";
