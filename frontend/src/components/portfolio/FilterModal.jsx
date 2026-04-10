@@ -31,14 +31,14 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
   };
 
   const pillClass = (value, selected) =>
-    `px-3 py-1 rounded-full border text-sm cursor-pointer transition capitalize ${
+    `px-3 py-1 rounded-full border text-sm font-medium cursor-pointer transition capitalize ${
       value === ""
         ? selected.length === 0
-          ? "bg-primary/20 text-primary border-primary"
-          : "border-base-300 text-base-content hover:bg-base-200"
+          ? "bg-primary/20 text-base-content border-primary"
+          : "border-base-400 text-base-content hover:bg-base-200"
         : selected.includes(value)
-          ? "bg-primary/20 text-primary border-primary"
-          : "border-base-300 text-base-content hover:bg-base-200"
+          ? "bg-primary/20 text-base-content border-primary"
+          : "border-base-400 text-base-content hover:bg-base-200"
     }`;
 
   return (
