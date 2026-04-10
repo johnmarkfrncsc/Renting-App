@@ -19,7 +19,7 @@ const PropertyFilters = ({
             placeholder="Search properties"
             value={searchTerm}
             onChange={(e) => onSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border-2 border-base-300 rounded-lg text-sm bg-base-100 text-base-content focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="w-full pl-9 pr-4 py-2 border-2 border-base-300 rounded-lg text-sm bg-base-200 text-base-content focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           />
         </div>
         {/* Filter btn */}
