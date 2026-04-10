@@ -142,7 +142,7 @@ const FilterModal = ({ isOpen, onClose, onApply, currentFilters }) => {
             onTouchMove={handleDragMove}
             onTouchEnd={handleDragEnd}
           >
-            <div className="w-10 h-1.5 rounded-full bg-base-content/30 active:bg-base-content/50" />
+            <div className="w-20 h-1.5 rounded-full bg-base-content/30 active:bg-base-content/50" />
           </div>
 
           {/* Header */}
